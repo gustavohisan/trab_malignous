@@ -42,7 +42,6 @@ class Header extends StatelessWidget with PreferredSizeWidget {
                 ),
                 child:
                    TextField(
-                     
                      cursorColor: Colors.black,
                      cursorWidth: 1,
                   //Fonte do texto

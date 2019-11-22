@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trab_malignous/footer.dart';
 import 'header.dart';
 import 'package:flutter/services.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget{
       home: Scaffold(
         appBar: Header(),
         body: buildBody(),
+        bottomNavigationBar: Footer(),
       ),
     );
   }
@@ -26,5 +28,6 @@ Widget buildBody()
 {
   return new Center(
       child: Image.network('https://pm1.narvii.com/6387/4ce55e1b5f8710cf8ffafd339fb9a2eba9d10ed1_hq.jpg'),
+      
     );
 }
