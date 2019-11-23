@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trab_malignous/footer.dart';
-import 'header.dart';
+import 'package:trab_malignous/rodape.dart';
+import 'package:trab_malignous/cabecalho.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
@@ -16,9 +16,9 @@ class MyApp extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       title: 'BReddit',
       home: Scaffold(
-        appBar: Header(),
+        appBar: Cabecalho(),
         body: buildBody(),
-        bottomNavigationBar: Footer(),
+        bottomNavigationBar: Rodape(),
       ),
     );
   }

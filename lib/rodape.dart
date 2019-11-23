@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:trab_malignous/novaPostagem.dart';
 
-class Footer extends StatefulWidget {
+class Rodape extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _Footer();
+    return _Rodape();
   }
 }
-class _Footer extends State<Footer> {
-  bool clicado = false;
+
+class _Rodape extends State<Rodape> {
+  bool clicadoHome = true;
+  bool clicadoSeguindo = false;
+  bool clicadoMeuPerfil = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,15 +21,21 @@ class _Footer extends State<Footer> {
             top: BorderSide(
                 width: 0.3, color: Color.fromRGBO(211, 211, 211, 1))),
       ),
-      height: 50,
+      height: MediaQuery.of(context).size.height * 0.08,
       child: BottomAppBar(
         elevation: 0,
         child: ButtonTheme(
-          minWidth: 80,
+          minWidth: MediaQuery.of(context).size.width * 0.25,
           child: Row(
             children: <Widget>[
               FlatButton(
-                onPressed: () => setState(() => clicado = !clicado),
+                onPressed: () {
+                  setState(() {
+                    clicadoHome = true;
+                    clicadoMeuPerfil = false;
+                    clicadoSeguindo = false;
+                  });
+                },
                 child: (Column(
                   children: <Widget>[
                     Padding(
@@ -32,7 +43,9 @@ class _Footer extends State<Footer> {
                       child: Icon(
                         Icons.home,
                         size: 30,
-                        color: clicado ? Color.fromRGBO(112, 112, 112, 1) : Colors.blue,
+                        color: clicadoHome
+                            ? Colors.blue
+                            : Color.fromRGBO(112, 112, 112, 1),
                       ),
                     ),
                     Text(
@@ -40,14 +53,22 @@ class _Footer extends State<Footer> {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.normal,
-                        color: Color.fromRGBO(112, 112, 112, 1),
+                        color: clicadoHome
+                            ? Colors.blue
+                            : Color.fromRGBO(112, 112, 112, 1),
                       ),
                     ),
                   ],
                 )),
               ),
               FlatButton(
-                onPressed: () => {},
+                onPressed: () {
+                  setState(() {
+                    clicadoHome = false;
+                    clicadoMeuPerfil = false;
+                    clicadoSeguindo = true;
+                  });
+                },
                 child: (Column(
                   children: <Widget>[
                     Padding(
@@ -55,7 +76,9 @@ class _Footer extends State<Footer> {
                       child: Icon(
                         Icons.group_add,
                         size: 30,
-                        color: Color.fromRGBO(112, 112, 112, 1),
+                        color: clicadoSeguindo
+                            ? Colors.blue
+                            : Color.fromRGBO(112, 112, 112, 1),
                       ),
                     ),
                     Text(
@@ -63,14 +86,21 @@ class _Footer extends State<Footer> {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.normal,
-                        color: Color.fromRGBO(112, 112, 112, 1),
+                        color: clicadoSeguindo
+                            ? Colors.blue
+                            : Color.fromRGBO(112, 112, 112, 1),
                       ),
                     )
                   ],
                 )),
               ),
               FlatButton(
-                onPressed: () => {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Formulario()),
+                  );
+                },
                 child: (Column(
                   children: <Widget>[
                     Padding(
@@ -96,7 +126,13 @@ class _Footer extends State<Footer> {
                 )),
               ),
               FlatButton(
-                onPressed: () => {},
+                onPressed: () {
+                  setState(() {
+                    clicadoHome = false;
+                    clicadoMeuPerfil = true;
+                    clicadoSeguindo = false;
+                  });
+                },
                 child: (Column(
                   children: <Widget>[
                     Padding(
@@ -104,7 +140,9 @@ class _Footer extends State<Footer> {
                       child: Icon(
                         Icons.person,
                         size: 30,
-                        color: Color.fromRGBO(112, 112, 112, 1),
+                        color: clicadoMeuPerfil
+                            ? Colors.blue
+                            : Color.fromRGBO(112, 112, 112, 1),
                       ),
                     ),
                     Text(
@@ -112,7 +150,9 @@ class _Footer extends State<Footer> {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.normal,
-                        color: Color.fromRGBO(112, 112, 112, 1),
+                        color: clicadoMeuPerfil
+                            ? Colors.blue
+                            : Color.fromRGBO(112, 112, 112, 1),
                       ),
                     )
                   ],

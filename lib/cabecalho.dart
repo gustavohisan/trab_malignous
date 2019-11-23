@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //Stateless ja que nao tem mudança, prefferedsizewidget porque é obrigatório
-class Header extends StatelessWidget with PreferredSizeWidget {
+class Cabecalho extends StatelessWidget with PreferredSizeWidget {
   //Tudo ai em baixo é o cabeçalho
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,7 @@ class Header extends StatelessWidget with PreferredSizeWidget {
     double widthCaixaTexto = width * 0.75;
     double widthIcone = width * 0.1;
     return Container(
-        height: 70, //Tamanho do cabeçalho
+        height: MediaQuery.of(context).size.height * 0.115, //Tamanho do cabeçalho
         child: AppBar(
           //Criação da appBar
           title: Row(
