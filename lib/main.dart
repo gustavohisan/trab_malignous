@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:trab_malignous/postagens.dart';
 import 'package:trab_malignous/rodape.dart';
 import 'package:trab_malignous/cabecalho.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Color.fromRGBO(74, 65, 42, 1), // Barra de baixo
       statusBarColor: Colors.purple[300], // Barra de cima
     ));
@@ -19,15 +20,22 @@ class MyApp extends StatelessWidget{
         appBar: Cabecalho(),
         body: buildBody(),
         bottomNavigationBar: Rodape(),
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
       ),
     );
   }
 }
 
-Widget buildBody()
-{
-  return new Center(
-      child: Image.network('https://pm1.narvii.com/6387/4ce55e1b5f8710cf8ffafd339fb9a2eba9d10ed1_hq.jpg'),
-      
-    );
+Widget buildBody() {
+  return new Container(
+    margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+    child: new ListView.builder(
+        itemCount: 20,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (BuildContext ctxt, int index) {
+          return Container(
+            child:Postagens(),
+          );
+        }),
+  );
 }
