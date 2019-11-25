@@ -39,7 +39,7 @@ class _Formulario extends State<Formulario> {
               backgroundColor: Colors.white,
               title: Text("Nova Publicação",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: MediaQuery.of(context).size.height * 0.03,
                     color: Color.fromRGBO(112, 112, 112, 1),
                   )),
             ),
@@ -60,7 +60,8 @@ class _Formulario extends State<Formulario> {
                           decoration: InputDecoration(
                               hintText: "Digite o titulo",
                               hintStyle: TextStyle(
-                                fontSize: 14,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.023,
                               ),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -90,7 +91,8 @@ class _Formulario extends State<Formulario> {
                               hintText:
                                   "Digite o texto da publicação (opcional)",
                               hintStyle: TextStyle(
-                                fontSize: 14,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.023,
                               ),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -105,7 +107,9 @@ class _Formulario extends State<Formulario> {
                           maxLines: 7,
                         ),
                       ),
-                      RaisedButton(
+                      Container(
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.65),
+                        child: RaisedButton(
                           onPressed: () {
                             // Validate returns true if the form is valid, or false
                             // otherwise.
@@ -113,6 +117,7 @@ class _Formulario extends State<Formulario> {
                           },
                           child: Text("Publicar"),
                         ),
+                      )
                     ],
                   ),
                 )),
