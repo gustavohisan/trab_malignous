@@ -33,7 +33,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
               Container(
                 //Altura e largura da caixa de texto
                 width: widthCaixaTexto,
-                height: 35,
+                height: MediaQuery.of(context).size.height * 0.057,
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(245, 245, 245, 1),
                   borderRadius: new BorderRadius.all(
@@ -46,8 +46,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                      cursorWidth: 1,
                   //Fonte do texto
                   style: TextStyle(
-                    fontSize: 13,
-                    height: 3.2,
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
                   ),
                   decoration: InputDecoration(     
                     border: InputBorder.none,
@@ -55,12 +54,12 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                     hintText: "Pesquisar",
                     hintStyle: TextStyle
                     (
-                      height: 1,
+                      height: MediaQuery.of(context).size.height * 0.001,
                     ),
                     //Icone dentro da textobox
                     prefixIcon: Icon(
                         Icons.search,
-                        size: 22,
+                        size: MediaQuery.of(context).size.height * 0.035,
                         color: Color.fromRGBO(112, 112, 112, 1),
                     )
                   ),
