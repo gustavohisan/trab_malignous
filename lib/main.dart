@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         appBar: Cabecalho(),
         body: MyScreen(),
         bottomNavigationBar: Rodape(),
-        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0.98),
       ),
     );
   }

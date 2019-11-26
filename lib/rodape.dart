@@ -42,7 +42,7 @@ class _Rodape extends State<Rodape> {
                       padding: const EdgeInsets.only(top: 2),
                       child: Icon(
                         Icons.home,
-                        size: MediaQuery.of(context).size.height * 0.05,
+                        size: 30,
                         color: clicadoHome
                             ? Colors.blue
                             : Color.fromRGBO(112, 112, 112, 1),
@@ -51,7 +51,7 @@ class _Rodape extends State<Rodape> {
                     Text(
                       "Início",
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.015,
+                        fontSize: 9,
                         fontWeight: FontWeight.normal,
                         color: clicadoHome
                             ? Colors.blue
@@ -75,7 +75,7 @@ class _Rodape extends State<Rodape> {
                       padding: const EdgeInsets.only(top: 2),
                       child: Icon(
                         Icons.group_add,
-                        size: MediaQuery.of(context).size.height * 0.05,
+                        size: 30,
                         color: clicadoSeguindo
                             ? Colors.blue
                             : Color.fromRGBO(112, 112, 112, 1),
@@ -84,7 +84,7 @@ class _Rodape extends State<Rodape> {
                     Text(
                       "Seguindo",
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.015,
+                        fontSize: 9,
                         fontWeight: FontWeight.normal,
                         color: clicadoSeguindo
                             ? Colors.blue
@@ -107,7 +107,7 @@ class _Rodape extends State<Rodape> {
                       padding: const EdgeInsets.only(top: 2),
                       child: Icon(
                         Icons.create,
-                        size: MediaQuery.of(context).size.height * 0.046,
+                        size: 28,
                         color: Color.fromRGBO(112, 112, 112, 1),
                       ),
                     ),
@@ -116,7 +116,7 @@ class _Rodape extends State<Rodape> {
                       child: Text(
                         "Publicar",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.015,
+                          fontSize: 9,
                           fontWeight: FontWeight.normal,
                           color: Color.fromRGBO(112, 112, 112, 1),
                         ),
@@ -139,7 +139,7 @@ class _Rodape extends State<Rodape> {
                       padding: const EdgeInsets.only(top: 2),
                       child: Icon(
                         Icons.person,
-                        size: MediaQuery.of(context).size.height * 0.05,
+                        size: 30,
                         color: clicadoMeuPerfil
                             ? Colors.blue
                             : Color.fromRGBO(112, 112, 112, 1),
@@ -148,7 +148,7 @@ class _Rodape extends State<Rodape> {
                     Text(
                       "Meu perfil",
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.015,
+                        fontSize: 9,
                         fontWeight: FontWeight.normal,
                         color: clicadoMeuPerfil
                             ? Colors.blue

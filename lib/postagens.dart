@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON;
 
 class Postagens extends StatefulWidget {
   @override
@@ -16,7 +20,13 @@ class _Postagens extends State<Postagens> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Column
+    (
+      children: <Widget>[
+        Text(
+          "ola",
+        ),
+        Container(
         margin: EdgeInsets.symmetric(
             vertical: MediaQuery.of(context).size.width * 0.03),
         color: Color.fromRGBO(255, 255, 255, 1),
@@ -187,6 +197,7 @@ class _Postagens extends State<Postagens> {
               ],
             ),
           ],
-        ));
+        )),
+      ]);
   }
 }

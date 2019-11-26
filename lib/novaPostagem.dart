@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'informacaoUsuario.dart' as infoUsuario;
 
 class Formulario extends StatefulWidget {
   @override
@@ -8,7 +9,10 @@ class Formulario extends StatefulWidget {
 }
 
 class _Formulario extends State<Formulario> {
+  TextEditingController _valorTexto = new TextEditingController();
   final _chaveForm = GlobalKey<FormState>();
+  String _valorDropdown;
+  String _valorTitulo;
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,6 +55,69 @@ class _Formulario extends State<Formulario> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.025,
+                            bottom: MediaQuery.of(context).size.height * 0.01,
+                            top: MediaQuery.of(context).size.height * 0.01),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: DropdownButtonFormField<String>(
+                            validator: (String value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Selecione um tópico válido';
+                              }
+                            },
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                color: Colors.grey[300],
+                              )),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                color: Colors.grey,
+                              )),
+                            ),
+                            hint: Text(
+                              "Selecione o tópico",
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.023,
+                              ),
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                value: "1",
+                                child: Text(
+                                  "First",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            0.023,
+                                  ),
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "2",
+                                child: Text(
+                                  "Second",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            0.023,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _valorDropdown = value;
+                              });
+                            },
+                            value: _valorDropdown,
+                          ),
+                        ),
+                      ),
                       Container(
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).size.width * 0.03),
@@ -77,6 +144,7 @@ class _Formulario extends State<Formulario> {
                             if (value.isEmpty) {
                               return 'Digite um titulo válido';
                             }
+                            _valorTitulo = value;
                             return null;
                           },
                         ),
@@ -86,6 +154,7 @@ class _Formulario extends State<Formulario> {
                             left: MediaQuery.of(context).size.width * 0.03),
                         width: MediaQuery.of(context).size.width * 0.96,
                         child: TextFormField(
+                          controller: _valorTexto,
                           cursorColor: Color.fromRGBO(112, 112, 112, 1),
                           decoration: InputDecoration(
                               hintText:
@@ -108,14 +177,34 @@ class _Formulario extends State<Formulario> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.65),
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.65),
                         child: RaisedButton(
+                          elevation: 0,
+                          color: Colors.cyan,
                           onPressed: () {
-                            // Validate returns true if the form is valid, or false
-                            // otherwise.
-                            if (_chaveForm.currentState.validate()) {}
+                            if (_chaveForm.currentState.validate()) {
+                              return showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    // Retrieve the text the that user has entered by using the
+                                    // TextEditingController.
+                                    content: Text(_valorTitulo +
+                                        " " +
+                                        _valorDropdown +
+                                        " " +
+                                        _valorTexto.text + " " + infoUsuario.idUsuario.toString()),
+                                  );
+                                },
+                              );
+                            }
                           },
-                          child: Text("Publicar"),
+                          child: Text("Publicar",
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * 0.023,
+                            color: Colors.white,
+                          ),),
                         ),
                       )
                     ],
