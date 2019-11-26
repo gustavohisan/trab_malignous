@@ -72,7 +72,6 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
           elevation: 0,
         ));
   } //Ate aqui era o cabeçalho
-
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

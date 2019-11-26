@@ -2,14 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Postagens extends StatefulWidget {
+class PostagemImagem extends StatefulWidget{
+  final String tipo;
+  const PostagemImagem(this.tipo);
   @override
   State<StatefulWidget> createState() {
-    return _Postagens();
+    return _PostagemImagem();
   }
 }
 
-class _Postagens extends State<Postagens> {
+class _PostagemImagem extends State<PostagemImagem>{
   bool botaoGostei = false;
   bool botaoNGostei = false;
   int likeCounter = 0;
@@ -37,7 +39,7 @@ class _Postagens extends State<Postagens> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
                         child: Text(
-                          "Title Corgi",
+                          this.widget.tipo,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontFamily: 'Roboto',
@@ -88,9 +90,8 @@ class _Postagens extends State<Postagens> {
               ),
             ),
             Container(
-              color: Colors.black,
               child: Image.network(
-                "https://media.giphy.com/media/7Y66VN3rtkPtu/giphy.gif",
+                "https://miro.medium.com/max/308/1*ovy6HGlyB5ls0VqpRqdZwA.png",
                 //width: MediaQuery.of(context).size.width * 0.99,
                 //height: MediaQuery.of(context).size.width * 0.95,
                 scale: 1.0,
@@ -101,8 +102,8 @@ class _Postagens extends State<Postagens> {
                 Container(
                   child: IconButton(
                     icon: Icon(
-                      Icons.sentiment_satisfied,
-                      size: 30,
+                      Icons.thumb_up,
+                      size: MediaQuery.of(context).size.width * 0.075,
                       color: this.botaoGostei
                           ? Colors.blue
                           : Color.fromRGBO(112, 112, 112, 1),
@@ -136,42 +137,42 @@ class _Postagens extends State<Postagens> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.14,
                 ),
-                Container(
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.sentiment_dissatisfied,
-                        size: 30,
-                        color: this.botaoNGostei
-                            ? Colors.red
-                            : Color.fromRGBO(112, 112, 112, 1),
-                      ),
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        //Precisa arrumar
-                        setState(() {
-                          if (!this.botaoNGostei) {
-                            this.botaoNGostei = true;
-                            this.botaoGostei = false;
-                            likeCounter--;
-                          } else {
-                            likeCounter++;
-                            this.botaoNGostei = false;
-                          }
-                        });
-                      },
-                      color: Color.fromRGBO(112, 112, 112, 1)),
-                  width: MediaQuery.of(context).size.width * 0.12,
-                ),
+                // Container(
+                //   child: IconButton(
+                //       icon: Icon(
+                //         Icons.sentiment_dissatisfied,
+                //         size: 30,
+                //         color: this.botaoNGostei
+                //             ? Colors.red
+                //             : Color.fromRGBO(112, 112, 112, 1),
+                //       ),
+                //       alignment: Alignment.centerRight,
+                //       onPressed: () {
+                //         //Precisa arrumar
+                //         setState(() {
+                //           if (!this.botaoNGostei) {
+                //             this.botaoNGostei = true;
+                //             this.botaoGostei = false;
+                //             likeCounter--;
+                //           } else {
+                //             likeCounter++;
+                //             this.botaoNGostei = false;
+                //           }
+                //         });
+                //       },
+                //       color: Color.fromRGBO(112, 112, 112, 1)),
+                //   width: MediaQuery.of(context).size.width * 0.12,
+                // ),
                 Container(
                   child: IconButton(
                       icon: Icon(
                         Icons.comment,
-                        size: 30,
+                        size: MediaQuery.of(context).size.width * 0.08,
                       ),
                       alignment: Alignment.centerRight,
                       onPressed: () {},
                       color: Color.fromRGBO(112, 112, 112, 1)),
-                  width: MediaQuery.of(context).size.width * 0.49,
+                  width: MediaQuery.of(context).size.width * 0.60,
                 ),
                 Container(
                   child: Text(
