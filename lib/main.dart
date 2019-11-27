@@ -16,28 +16,38 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Isso aqui é a cor do cabeçalho e rodapé do android, não esquece de mudar no fim
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Color.fromRGBO(74, 65, 42, 1), // Barra de baixo
       statusBarColor: Colors.purple[300], // Barra de cima
     ));
 
     return MaterialApp(
+      //Nao aparecer debug
       debugShowCheckedModeBanner: false,
       title: 'BReddit',
       home: Scaffold(
+        //Chama a construção do cabecalho
         appBar: Cabecalho(),
+        //Corpo
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+          //List view para mostrar todos os topicos
           child: new ListView.builder(
+            //Agora so fazemos 5
               itemCount: 5,
+              //Scroll vertical
               scrollDirection: Axis.vertical,
+              //Começa a criação
               itemBuilder: (BuildContext ctxt, int index) {
                 return Container(
-                  child: Text(""),
+                  child: PostagemImagem("Testea"),
                 );
               }),
         ),
+        //Criação do rodape
         bottomNavigationBar: Rodape(),
+        //Cor de fundo do programa
         backgroundColor: Color.fromRGBO(255, 255, 255, 0.98),
       ),
     );
