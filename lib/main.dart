@@ -1,19 +1,48 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:trab_malignous/postagem.dart';
-import 'package:trab_malignous/postagemImagem.dart';
-import 'package:trab_malignous/postagemTexto.dart';
-import 'package:trab_malignous/rodape.dart';
-import 'package:trab_malignous/cabecalho.dart';
+import 'Model/Postagem.dart';
+import 'Screens/postagemImagem.dart';
+import 'Screens/postagemTexto.dart';
+import 'Screens/rodape.dart';
+import 'Screens/cabecalho.dart';
 import 'package:flutter/services.dart';
-import 'package:trab_malignous/teste.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  createState() => _MyApp();
+}
+
+class _MyApp extends State<MyApp> {
+  //API
+  var publicacoes = new List<Postagem>();
+  fetchPost() async {
+    final response = await http.get('http://seu ip aqui3000/Publicacoes');
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      Iterable list = json.decode(response.body);
+       publicacoes = list.map((model) => Postagem.fromJson(model)).toList();
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPost();
+  }
+
+  dispose() {
+    super.dispose();
+  }
+  //
+
+ 
   @override
   Widget build(BuildContext context) {
     //Isso aqui é a cor do cabeçalho e rodapé do android, não esquece de mudar no fim
@@ -21,7 +50,6 @@ class MyApp extends StatelessWidget {
       systemNavigationBarColor: Color.fromRGBO(74, 65, 42, 1), // Barra de baixo
       statusBarColor: Colors.purple[300], // Barra de cima
     ));
-
     return MaterialApp(
       //Nao aparecer debug
       debugShowCheckedModeBanner: false,
@@ -34,15 +62,22 @@ class MyApp extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
           //List view para mostrar todos os topicos
           child: new ListView.builder(
-            //Agora so fazemos 5
-              itemCount: 5,
+              //Agora so fazemos 5
+              itemCount: publicacoes.length,
               //Scroll vertical
               scrollDirection: Axis.vertical,
               //Começa a criação
               itemBuilder: (BuildContext ctxt, int index) {
-                return Container(
-                  child: PostagemImagem("Testea"),
+                if(publicacoes[index].tipo.compareTo('0') == 0)
+                {
+                  return Container(
+                    child: PostagemTexto(postagem: publicacoes[index]),
                 );
+                }else{
+                  return Container(
+                    child: PostagemImagem(postagem: publicacoes[index]),
+                );
+                }
               }),
         ),
         //Criação do rodape
@@ -51,30 +86,5 @@ class MyApp extends StatelessWidget {
         backgroundColor: Color.fromRGBO(255, 255, 255, 0.98),
       ),
     );
-  }
-}
-
-class MyScreen extends StatefulWidget {
-  @override
-   createState() => _MyScreen();
-}
-
-class _MyScreen extends State {
-
-  //Criar algo para ler json e achar um jeito de comunicar com o postagens para integrar
-  //crair uma interface que aceita postagens do tipo texto ou img
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-    margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
-    child: new ListView.builder(
-        itemCount: 2,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (BuildContext ctxt, int index) {
-          return Container(
-            child: PostagemTexto("texte"),
-          );
-        }),
-  );
   }
 }

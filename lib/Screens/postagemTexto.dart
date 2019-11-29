@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import '../Model/Postagem.dart';
 
 class PostagemTexto extends StatefulWidget {
-  final Object json;
-  const PostagemTexto(this.json);
+  final Postagem postagem;
+   PostagemTexto({Key key, @required this.postagem}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
         return _PostagemTexto();
@@ -13,8 +14,6 @@ class PostagemTexto extends StatefulWidget {
 
 class _PostagemTexto extends State<PostagemTexto>{
   bool botaoGostei = false;
-  bool botaoNGostei = false;
-  int likeCounter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,7 @@ class _PostagemTexto extends State<PostagemTexto>{
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
                         child: Text(
-                          this.widget.json,
+                          "Topico: " + widget.postagem.idTopico.toString(),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontFamily: 'Roboto',
@@ -51,7 +50,7 @@ class _PostagemTexto extends State<PostagemTexto>{
                       Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Text(
-                            "Poublicado por xxxc",
+                            "Publicado por " + widget.postagem.idUsuario.toString(), //Apartir do id buscar o usuario
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: 'Roboto',
@@ -80,7 +79,7 @@ class _PostagemTexto extends State<PostagemTexto>{
               margin: EdgeInsets.symmetric(
                   vertical: MediaQuery.of(context).size.width * 0.05),
               child: Text(
-                "Um Corgi",
+                widget.postagem.titulo,
                 softWrap: true,
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -93,14 +92,14 @@ class _PostagemTexto extends State<PostagemTexto>{
               width: MediaQuery.of(context).size.width * 0.99,
               height: MediaQuery.of(context).size.width * 0.80,
               color: Colors.black12,
-              child: Text("aaaaaaaaaaaaaaaa"),
+              child: Text(widget.postagem.corpo),
             ),
             Row(
               children: <Widget>[
                 Container(
                   child: IconButton(
                     icon: Icon(
-                      Icons.sentiment_satisfied,
+                      Icons.thumb_up,
                       size: 30,
                       color: this.botaoGostei
                           ? Colors.blue
@@ -110,23 +109,22 @@ class _PostagemTexto extends State<PostagemTexto>{
                     color: Color.fromRGBO(112, 112, 112, 1),
                     onPressed: () {
                       //Precisa arrumar
-                      setState(() {
-                        if (!this.botaoGostei) {
-                          this.botaoGostei = true;
-                          this.botaoNGostei = false;
-                          likeCounter++;
-                        } else {
-                          this.botaoGostei = false;
-                          likeCounter--;
-                        }
-                      });
+                      // setState(() {
+                      //   if (!this.botaoGostei) {
+                      //     this.botaoGostei = true;
+                      //     likeCounter++;
+                      //   } else {
+                      //     this.botaoGostei = false;
+                      //     likeCounter--;
+                      //   }
+                      // });
                     },
                   ),
                   width: MediaQuery.of(context).size.width * 0.12,
                 ),
                 Container(
                   child: Text(
-                    likeCounter.toString(),
+                    widget.postagem.quantAvaliacoes.toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Roboto',

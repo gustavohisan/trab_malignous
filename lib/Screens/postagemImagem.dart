@@ -1,17 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
-import 'package:trab_malignous/postagem.dart';
+import '../Model/Postagem.dart';
 import 'dart:convert' as JSON;
 import 'postagemCompleta.dart';
-import 'teste.dart';
 
 class PostagemImagem extends StatefulWidget {
-  final String tipo;
-  const PostagemImagem(this.tipo);
+  final Postagem postagem;
+   PostagemImagem({Key key, @required this.postagem}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _PostagemImagem();
@@ -20,14 +17,12 @@ class PostagemImagem extends StatefulWidget {
 
 class _PostagemImagem extends State<PostagemImagem> {
   bool botaoGostei = false;
-  bool botaoNGostei = false;
-  int likeCounter = 0;
 
-  Teste teste = Teste(
+  /*Teste teste = Teste(
     id: 1,
     completed: "https://correio-cdn2.cworks.cloud/fileadmin/_processed_/0/a/csm_00_Hitech_Electric_EcoTech_Carro_Eletrico_na_Bahia_Foto_Carol_Dantas_Divulgacao_a7ecc750cc.jpg",
     title: "testando",
-  );
+  );*/
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +48,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Text(
-                            this.widget.tipo,
+                            "Topico: " + widget.postagem.idTopico.toString(),
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: 'Roboto',
@@ -65,7 +60,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.75,
                             child: Text(
-                              "Poublicado por xxxc",
+                              "Publicado por " + widget.postagem.idUsuario.toString(), //Apartir do id buscar o usuario
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontFamily: 'Roboto',
@@ -91,7 +86,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => PostagemCompleta(
-                        teste: teste,
+                       // teste: teste,
                       )));
                 },
                 child: Column(
@@ -103,7 +98,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                       margin: EdgeInsets.symmetric(
                           vertical: MediaQuery.of(context).size.width * 0.05),
                       child: Text(
-                        "Um Corgi",
+                        widget.postagem.titulo,
                         softWrap: true,
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -114,7 +109,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                     ),
                     Container(
                       child: Image.network(
-                        "https://miro.medium.com/max/308/1*ovy6HGlyB5ls0VqpRqdZwA.png",
+                        widget.postagem.corpo.toString(),
                         //width: MediaQuery.of(context).size.width * 0.99,
                         //height: MediaQuery.of(context).size.width * 0.95,
                         scale: 1.0,
@@ -138,23 +133,23 @@ class _PostagemImagem extends State<PostagemImagem> {
                       color: Color.fromRGBO(112, 112, 112, 1),
                       onPressed: () {
                         //Precisa arrumar
-                        setState(() {
-                          if (!this.botaoGostei) {
-                            this.botaoGostei = true;
-                            this.botaoNGostei = false;
-                            likeCounter++;
-                          } else {
-                            this.botaoGostei = false;
-                            likeCounter--;
-                          }
-                        });
+                        // setState(() {
+                        //   if (!this.botaoGostei) {
+                        //     this.botaoGostei = true;
+                        //     //this.botaoNGostei = false;
+                        //     likeCounter++;
+                        //   } else {
+                        //     this.botaoGostei = false;
+                        //     likeCounter--;
+                        //   }
+                        // });
                       },
                     ),
                     width: MediaQuery.of(context).size.width * 0.12,
                   ),
                   Container(
                     child: Text(
-                      likeCounter.toString(),
+                      widget.postagem.quantAvaliacoes.toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Roboto',
