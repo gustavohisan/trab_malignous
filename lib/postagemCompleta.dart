@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'informacaoUsuario.dart' as infoUsuario;
+import 'teste.dart';
 
 class PostagemCompleta extends StatefulWidget {
+
+ Teste teste;
+  PostagemCompleta({this.teste});
+
   @override
   _PostagemCompleta createState() {
     return _PostagemCompleta();
@@ -9,6 +14,7 @@ class PostagemCompleta extends StatefulWidget {
 }
 
 class _PostagemCompleta extends State<PostagemCompleta> {
+
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -24,7 +30,7 @@ class _PostagemCompleta extends State<PostagemCompleta> {
         ),
         body: Column(
           children: <Widget>[
-            
+            Image.network(widget.teste.completed),
           ],
         ),
       ),

@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
+import 'package:trab_malignous/postagem.dart';
 import 'dart:convert' as JSON;
 import 'postagemCompleta.dart';
+import 'teste.dart';
 
 class PostagemImagem extends StatefulWidget {
   final String tipo;
@@ -20,6 +22,12 @@ class _PostagemImagem extends State<PostagemImagem> {
   bool botaoGostei = false;
   bool botaoNGostei = false;
   int likeCounter = 0;
+
+  Teste teste = Teste(
+    id: 1,
+    completed: "https://correio-cdn2.cworks.cloud/fileadmin/_processed_/0/a/csm_00_Hitech_Electric_EcoTech_Carro_Eletrico_na_Bahia_Foto_Carol_Dantas_Divulgacao_a7ecc750cc.jpg",
+    title: "testando",
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +90,9 @@ class _PostagemImagem extends State<PostagemImagem> {
               GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PostagemCompleta()));
+                      MaterialPageRoute(builder: (context) => PostagemCompleta(
+                        teste: teste,
+                      )));
                 },
                 child: Column(
                   children: <Widget>[
@@ -208,3 +218,4 @@ class _PostagemImagem extends State<PostagemImagem> {
     ]);
   }
 }
+
