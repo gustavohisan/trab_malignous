@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:trab_malignous/Screens/postagemCompletaImagem.dart';
 import '../Model/Postagem.dart';
 import 'dart:convert' as JSON;
-import 'postagemCompleta.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class PostagemImagem extends StatefulWidget {
   final Postagem postagem;
-   PostagemImagem({Key key, @required this.postagem}) : super(key: key);
+  PostagemImagem({Key key, @required this.postagem}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _PostagemImagem();
@@ -37,19 +37,29 @@ class _PostagemImagem extends State<PostagemImagem> {
               Row(
                 children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.12,
-                    child: Icon(Icons.account_circle,
-                        size: MediaQuery.of(context).size.width * 0.10,
-                        color: Color.fromRGBO(112, 112, 112, 1)),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.02,
+                          right: MediaQuery.of(context).size.width * 0.02),
+                      child: Container(
+                          width: MediaQuery.of(context).size.height * 0.05,
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(
+                                      "https://i.imgur.com/BoN9kdC.png")))),
+                    ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.70,
                     child: Column(
                       children: <Widget>[
                         Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Text(
-                            "Topico: " + this.widget.postagem.idTopico.toString(),
+                            this.widget.postagem.tituloTopico,
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: 'Roboto',
@@ -61,7 +71,11 @@ class _PostagemImagem extends State<PostagemImagem> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.75,
                             child: Text(
-                              "Publicado por " + this.widget.postagem.idUsuario.toString(), //Apartir do id buscar o usuario
+                              "Publicado por " +
+                                  this
+                                      .widget
+                                      .postagem
+                                      .nomeUsuario, //Apartir do id buscar o usuario
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontFamily: 'Roboto',
@@ -85,10 +99,12 @@ class _PostagemImagem extends State<PostagemImagem> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PostagemCompletaImagem(
-                       postagem: widget.postagem,
-                      )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PostagemCompletaImagem(
+                                postagem: widget.postagem,
+                              )));
                 },
                 child: Column(
                   children: <Widget>[
@@ -99,7 +115,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                       margin: EdgeInsets.symmetric(
                           vertical: MediaQuery.of(context).size.width * 0.05),
                       child: Text(
-                        this.widget.postagem.titulo,
+                        this.widget.postagem.tituloPublicacao,
                         softWrap: true,
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -109,11 +125,19 @@ class _PostagemImagem extends State<PostagemImagem> {
                       ),
                     ),
                     Container(
-                      child: Image.network(
-                        this.widget.postagem.corpo.toString(),
-                        //width: MediaQuery.of(context).size.width * 0.99,
-                        //height: MediaQuery.of(context).size.width * 0.95,
-                        scale: 1.0,
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
+                            child:Center(child: CircularProgressIndicator()),
+                          ),
+                          Center(
+                            child: FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: widget.postagem.corpo,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -214,4 +238,3 @@ class _PostagemImagem extends State<PostagemImagem> {
     ]);
   }
 }
-
