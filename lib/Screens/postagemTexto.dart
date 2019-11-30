@@ -5,14 +5,14 @@ import '../Model/Postagem.dart';
 
 class PostagemTexto extends StatefulWidget {
   final Postagem postagem;
-   PostagemTexto({Key key, @required this.postagem}) : super(key: key);
+  PostagemTexto({Key key, @required this.postagem}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-        return _PostagemTexto();
+    return _PostagemTexto();
   }
 }
 
-class _PostagemTexto extends State<PostagemTexto>{
+class _PostagemTexto extends State<PostagemTexto> {
   bool botaoGostei = false;
 
   @override
@@ -26,19 +26,27 @@ class _PostagemTexto extends State<PostagemTexto>{
             Row(
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.12,
-                  child: Icon(Icons.account_circle,
-                      size: MediaQuery.of(context).size.width * 0.10, 
-                      color: Color.fromRGBO(112, 112, 112, 1)),
-                ),
+                  child: 
+                  Padding(
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.02, right: MediaQuery.of(context).size.width * 0.02),
+                    child:Container(
+                      width: MediaQuery.of(context).size.height * 0.05,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  "https://i.imgur.com/BoN9kdC.png")))),
+                ),),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.70,
                   child: Column(
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
                         child: Text(
-                          "Topico: " + this.widget.postagem.idTopico.toString(),
+                          this.widget.postagem.tituloTopico,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontFamily: 'Roboto',
@@ -47,10 +55,15 @@ class _PostagemTexto extends State<PostagemTexto>{
                                   MediaQuery.of(context).size.width * 0.035),
                         ),
                       ),
+                      
                       Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Text(
-                            "Publicado por " + this.widget.postagem.idUsuario.toString(), //Apartir do id buscar o usuario
+                            "Publicado por " +
+                                this
+                                    .widget
+                                    .postagem
+                                    .nomeUsuario, //Apartir do id buscar o usuario
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: 'Roboto',
@@ -61,12 +74,13 @@ class _PostagemTexto extends State<PostagemTexto>{
                     ],
                   ),
                 ),
+                
                 Container(
                   width: MediaQuery.of(context).size.width * 0.10,
                   child: IconButton(
                     icon: Icon(Icons.more_horiz,
-                      size: MediaQuery.of(context).size.width * 0.08,  
-                      color: Color.fromRGBO(112, 112, 112, 1)),
+                        size: MediaQuery.of(context).size.width * 0.08,
+                        color: Color.fromRGBO(112, 112, 112, 1)),
                     onPressed: () => {},
                   ),
                 ),
@@ -79,7 +93,7 @@ class _PostagemTexto extends State<PostagemTexto>{
               margin: EdgeInsets.symmetric(
                   vertical: MediaQuery.of(context).size.width * 0.05),
               child: Text(
-                this.widget.postagem.titulo,
+                this.widget.postagem.tituloPublicacao,
                 softWrap: true,
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -92,7 +106,8 @@ class _PostagemTexto extends State<PostagemTexto>{
               width: MediaQuery.of(context).size.width * 0.99,
               height: MediaQuery.of(context).size.width * 0.80,
               color: Colors.black12,
-              child: Text(this.widget.postagem.corpo,
+              child: Text(
+                this.widget.postagem.corpo,
                 softWrap: true,
                 textAlign: TextAlign.left,
                 style: TextStyle(

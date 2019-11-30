@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trab_malignous/Model/Postagem.dart';
 import 'informacaoUsuario.dart' as infoUsuario;
 import 'package:photo_view/photo_view.dart';
+import 'package:intl/intl.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class PostagemCompletaImagem extends StatefulWidget {
   final Postagem postagem;
@@ -16,22 +18,40 @@ class PostagemCompletaImagem extends StatefulWidget {
 class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
   @override
   Widget build(BuildContext context) {
+    String dataConvertida = DateFormat('dd/MM/yyyy – kk:mm')
+        .format(DateTime.parse(widget.postagem.data));
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: Icon(Icons.close, color: Color.fromRGBO(112, 112, 112, 1)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+          leading: IconButton(
+            icon: Icon(Icons.close, color: Color.fromRGBO(112, 112, 112, 1)),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          body: SingleChildScrollView(
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Image.network(widget.postagem.corpo),
+                Stack(
+                  children: [
+                    Center(child: CircularProgressIndicator()),
+                    Center(
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image:
+                            widget.postagem.corpo,
+                      ),
+                    ),
+                  ],
+                ),
+                //Image.network(widget.postagem.corpo),
                 //Titulo da publicacao
                 Padding(
                   padding: EdgeInsets.only(
@@ -39,7 +59,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.90,
                     child: Text(
-                      widget.postagem.titulo,
+                      widget.postagem.tituloPublicacao,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Color.fromRGBO(112, 112, 112, 1),
@@ -75,18 +95,37 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                                         0.02),
                                 child: Column(
                                   children: <Widget>[
-                                    Text("publicado em " +
-                                        widget.postagem.idTopico.toString()),
-                                    Text(
-                                      " por " +
-                                          widget.postagem.idUsuario.toString() +
-                                          " as " +
-                                          widget.postagem.data,
-                                      style: TextStyle(
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.75,
+                                      child: Text(
+                                        widget.postagem.tituloTopico,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color:
+                                              Color.fromRGBO(112, 112, 112, 1),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.75,
+                                      child: Text(
+                                        "por " +
+                                            widget.postagem.nomeUsuario +
+                                            " as " +
+                                            dataConvertida,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
                                           fontSize: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.02),
+                                              0.02,
+                                          fontWeight: FontWeight.w200,
+                                          color:
+                                              Color.fromRGBO(112, 112, 112, 1),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -96,20 +135,67 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                         ),
                       ],
                     )),
-
-                Row(
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.thumb_up),
-                      onPressed: () {},
-                    ),
-                    Text(widget.postagem.quantAvaliacoes.toString()),
-                  ],
-                )
+                Container(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.height * 0.02,
+                      top: MediaQuery.of(context).size.height * 0.04),
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.thumb_up),
+                        color: Color.fromRGBO(112, 112, 112, 1),
+                        iconSize: MediaQuery.of(context).size.height * 0.05,
+                        onPressed: () {},
+                      ),
+                      Text(
+                        widget.postagem.quantAvaliacoes.toString(),
+                        style: TextStyle(
+                          color: Color.fromRGBO(112, 112, 112, 1),
+                          fontSize: MediaQuery.of(context).size.height * 0.027,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.55,
+                        child: IconButton(
+                            icon: Icon(
+                              Icons.comment,
+                              size: MediaQuery.of(context).size.width * 0.08,
+                            ),
+                            alignment: Alignment.centerRight,
+                            onPressed: () {},
+                            color: Color.fromRGBO(112, 112, 112, 1)),
+                      ),
+                      Text(
+                        "1000",
+                        style: TextStyle(
+                          color: Color.fromRGBO(112, 112, 112, 1),
+                          fontSize: MediaQuery.of(context).size.height * 0.027,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.02),
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      color: Colors.grey,
+                      child: Text(
+                        "Comentários",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.height * 0.03,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )),
+                ),
               ],
             ),
-          )
-          /*
+          ),
+        ),
+        /*
         PhotoView(
           imageProvider: NetworkImage(widget.postagem.corpo),
           backgroundDecoration: BoxDecoration(
@@ -119,10 +205,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
           minScale: MediaQuery.of(context).size.width / MediaQuery.of(context).size.height,
         ),
         */
-          ),
+      ),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

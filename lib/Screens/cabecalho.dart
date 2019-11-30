@@ -59,10 +59,6 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                     border: InputBorder.none,
                     //Placeholder
                     hintText: "Pesquisar",
-                    hintStyle: TextStyle
-                    (
-                      height: MediaQuery.of(context).size.height * 0.001,
-                    ),
                     //Icone dentro da textobox
                     prefixIcon: Icon(
                         Icons.search,
