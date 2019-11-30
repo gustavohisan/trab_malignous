@@ -45,8 +45,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                     Center(
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
-                        image:
-                            widget.postagem.corpo,
+                        image: widget.postagem.corpo,
                       ),
                     ),
                   ],
@@ -63,6 +62,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Color.fromRGBO(112, 112, 112, 1),
+                        fontWeight: FontWeight.w500,
                         fontSize: MediaQuery.of(context).size.height * 0.03,
                       ),
                     ),
@@ -121,7 +121,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                                                   .size
                                                   .height *
                                               0.02,
-                                          fontWeight: FontWeight.w200,
+                                          fontWeight: FontWeight.w300,
                                           color:
                                               Color.fromRGBO(112, 112, 112, 1),
                                         ),
