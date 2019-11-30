@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'Model/Postagem.dart';
 import 'Screens/postagemImagem.dart';
@@ -7,8 +5,10 @@ import 'Screens/postagemTexto.dart';
 import 'Screens/rodape.dart';
 import 'Screens/cabecalho.dart';
 import 'package:flutter/services.dart';
+import 'package:trab_malignous/API/Api.dart';
 
 void main() => runApp(MyApp());
+final GlobalKey<RefreshIndicatorState> _recarregarInicioChave = new GlobalKey<RefreshIndicatorState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -16,34 +16,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
-  //API
-  var publicacoes = new List<Postagem>();
-  fetchPost() async {
-    final response = await http.get('http://192.168.0.16:3000/Publicacoes');
-
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      Iterable list = json.decode(response.body);
-      publicacoes = list.map((model) => Postagem.fromJson(model)).toList();
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load post');
-    }
-  }
-
-  final GlobalKey<RefreshIndicatorState> _recarregarInicioChave =
-      new GlobalKey<RefreshIndicatorState>();
-
   @override
   void initState() {
     super.initState();
-    fetchPost();
   }
 
   dispose() {
     super.dispose();
   }
-  //
 
   @override
   Widget build(BuildContext context) {
@@ -66,22 +46,30 @@ class _MyApp extends State<MyApp> {
           child: RefreshIndicator(
             key: _recarregarInicioChave,
             onRefresh: _recarregar,
-            child: ListView.builder(
-                //Agora so fazemos 5
-                itemCount: publicacoes.length,
-                //Scroll vertical
-                scrollDirection: Axis.vertical,
-                //Começa a criação
-                itemBuilder: (BuildContext ctxt, int index) {
-                  if (publicacoes[index].tipo.compareTo('texto') == 0) {
-                    return Container(
-                      child: PostagemTexto(postagem: publicacoes[index]),
-                    );
-                  } else {
-                    return Container(
-                      child: PostagemImagem(postagem: publicacoes[index]),
-                    );
-                  }
+            child: FutureBuilder(
+                future: getPostagens(),
+                builder: (context, projectSnap) {
+                  return projectSnap.hasData ? 
+                      ListView.builder(
+                      itemCount: projectSnap.data.length,
+                      //Scroll vertical
+                      scrollDirection: Axis.vertical,
+                      //Começa a criação
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        if (projectSnap.data[index].tipo.compareTo('texto') ==
+                            0) {
+                          return Container(
+                            child: PostagemTexto(
+                                postagem: projectSnap.data[index]),
+                          );
+                        } else {
+                          return Container(
+                            child: PostagemImagem(
+                                postagem: projectSnap.data[index]),
+                          );
+                        }
+                      })
+                      : Center(child: CircularProgressIndicator());
                 }),
           ),
         ),
@@ -92,8 +80,8 @@ class _MyApp extends State<MyApp> {
       ),
     );
   }
-}
 
-Future<Null> _recarregar() {
-      
+  Future<Null> _recarregar() async{ 
+  setState(() {});
+}
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trab_malignous/Model/Postagem.dart';
+import '../Model/Postagem.dart';
 import 'informacaoUsuario.dart' as infoUsuario;
 import 'package:photo_view/photo_view.dart';
 

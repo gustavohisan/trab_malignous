@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Postagem {
   int id;
   String data;
@@ -31,6 +33,17 @@ class Postagem {
     idUsuario = json['id_usuario'];
     idTopico = json['id_topico'];
   }
+    // factory Postagem.fromJson(Map<String, dynamic> json) => new Postagem(
+    // id : json['id'],
+    // data : json['data'],
+    // titulo : json['titulo'],
+    // corpo : json['corpo'],
+    // situacao : json['situacao'],
+    // quantAvaliacoes : json['quant_avaliacoes'],
+    // tipo : json['tipo'],
+    // idUsuario : json['id_usuario'],
+    // idTopico : json['id_topico'],
+    // );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -46,3 +59,8 @@ class Postagem {
     return data;
   }
 }
+
+  Postagem retornarUmaPostagem(String str){
+    final jsonData = json.decode(str);
+    return Postagem.fromJson(jsonData);
+  }
