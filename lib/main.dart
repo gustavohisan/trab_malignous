@@ -19,17 +19,20 @@ class _MyApp extends State<MyApp> {
   //API
   var publicacoes = new List<Postagem>();
   fetchPost() async {
-    final response = await http.get('http://192.168.0.14:3000/Publicacoes');
+    final response = await http.get('http://192.168.0.16:3000/Publicacoes');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       Iterable list = json.decode(response.body);
-       publicacoes = list.map((model) => Postagem.fromJson(model)).toList();
+      publicacoes = list.map((model) => Postagem.fromJson(model)).toList();
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
   }
+
+  final GlobalKey<RefreshIndicatorState> _recarregarInicioChave =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -42,7 +45,6 @@ class _MyApp extends State<MyApp> {
   }
   //
 
- 
   @override
   Widget build(BuildContext context) {
     //Isso aqui é a cor do cabeçalho e rodapé do android, não esquece de mudar no fim
@@ -61,24 +63,27 @@ class _MyApp extends State<MyApp> {
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
           //List view para mostrar todos os topicos
-          child: new ListView.builder(
-              //Agora so fazemos 5
-              itemCount: publicacoes.length,
-              //Scroll vertical
-              scrollDirection: Axis.vertical,
-              //Começa a criação
-              itemBuilder: (BuildContext ctxt, int index) {
-                if(publicacoes[index].tipo.compareTo('texto') == 0)
-                {
-                  return Container(
-                    child: PostagemTexto(postagem: publicacoes[index]),
-                );
-                }else{
-                  return Container(
-                    child: PostagemImagem(postagem: publicacoes[index]),
-                );
-                }
-              }),
+          child: RefreshIndicator(
+            key: _recarregarInicioChave,
+            onRefresh: _recarregar,
+            child: ListView.builder(
+                //Agora so fazemos 5
+                itemCount: publicacoes.length,
+                //Scroll vertical
+                scrollDirection: Axis.vertical,
+                //Começa a criação
+                itemBuilder: (BuildContext ctxt, int index) {
+                  if (publicacoes[index].tipo.compareTo('texto') == 0) {
+                    return Container(
+                      child: PostagemTexto(postagem: publicacoes[index]),
+                    );
+                  } else {
+                    return Container(
+                      child: PostagemImagem(postagem: publicacoes[index]),
+                    );
+                  }
+                }),
+          ),
         ),
         //Criação do rodape
         bottomNavigationBar: Rodape(),
@@ -87,4 +92,8 @@ class _MyApp extends State<MyApp> {
       ),
     );
   }
+}
+
+Future<Null> _recarregar() {
+      
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
+import 'package:trab_malignous/Screens/postagemCompletaImagem.dart';
 import '../Model/Postagem.dart';
 import 'dart:convert' as JSON;
 import 'postagemCompleta.dart';
@@ -85,8 +86,8 @@ class _PostagemImagem extends State<PostagemImagem> {
               GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PostagemCompleta(
-                       // teste: teste,
+                      MaterialPageRoute(builder: (context) => PostagemCompletaImagem(
+                       postagem: widget.postagem,
                       )));
                 },
                 child: Column(
