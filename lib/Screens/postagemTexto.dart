@@ -38,7 +38,7 @@ class _PostagemTexto extends State<PostagemTexto>{
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
                         child: Text(
-                          "Topico: " + widget.postagem.idTopico.toString(),
+                          "Topico: " + this.widget.postagem.idTopico.toString(),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontFamily: 'Roboto',
@@ -50,7 +50,7 @@ class _PostagemTexto extends State<PostagemTexto>{
                       Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Text(
-                            "Publicado por " + widget.postagem.idUsuario.toString(), //Apartir do id buscar o usuario
+                            "Publicado por " + this.widget.postagem.idUsuario.toString(), //Apartir do id buscar o usuario
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: 'Roboto',
@@ -79,7 +79,7 @@ class _PostagemTexto extends State<PostagemTexto>{
               margin: EdgeInsets.symmetric(
                   vertical: MediaQuery.of(context).size.width * 0.05),
               child: Text(
-                widget.postagem.titulo,
+                this.widget.postagem.titulo,
                 softWrap: true,
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -92,7 +92,14 @@ class _PostagemTexto extends State<PostagemTexto>{
               width: MediaQuery.of(context).size.width * 0.99,
               height: MediaQuery.of(context).size.width * 0.80,
               color: Colors.black12,
-              child: Text(widget.postagem.corpo),
+              child: Text(this.widget.postagem.corpo,
+                softWrap: true,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontFamily: 'Roboto',
+                    color: Color.fromRGBO(112, 112, 112, 1),
+                    fontSize: MediaQuery.of(context).size.width * 0.05),
+              ),
             ),
             Row(
               children: <Widget>[
@@ -124,7 +131,7 @@ class _PostagemTexto extends State<PostagemTexto>{
                 ),
                 Container(
                   child: Text(
-                    widget.postagem.quantAvaliacoes.toString(),
+                    this.widget.postagem.quantAvaliacoes.toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Roboto',

@@ -5,9 +5,9 @@ class Postagem {
   String corpo;
   bool situacao;
   int quantAvaliacoes;
+  String tipo;
   int idUsuario;
   int idTopico;
-  String tipo;
 
   Postagem(
       {this.id,
@@ -16,9 +16,9 @@ class Postagem {
       this.corpo,
       this.situacao,
       this.quantAvaliacoes,
+      this.tipo,
       this.idUsuario,
-      this.idTopico,
-      this.tipo});
+      this.idTopico});
 
   Postagem.fromJson(Map json) {
     id = json['id'];
@@ -27,9 +27,9 @@ class Postagem {
     corpo = json['corpo'];
     situacao = json['situacao'];
     quantAvaliacoes = json['quant_avaliacoes'];
+    tipo = json['tipo'];
     idUsuario = json['id_usuario'];
     idTopico = json['id_topico'];
-    tipo = json['tipo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -40,9 +40,9 @@ class Postagem {
     data['corpo'] = this.corpo;
     data['situacao'] = this.situacao;
     data['quant_avaliacoes'] = this.quantAvaliacoes;
+    data['tipo'] = this.tipo;
     data['id_usuario'] = this.idUsuario;
     data['id_topico'] = this.idTopico;
-    data['tipo'] = this.tipo;
     return data;
   }
 }

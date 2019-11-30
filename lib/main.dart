@@ -19,7 +19,7 @@ class _MyApp extends State<MyApp> {
   //API
   var publicacoes = new List<Postagem>();
   fetchPost() async {
-    final response = await http.get('http://seu ip aqui3000/Publicacoes');
+    final response = await http.get('http://192.168.0.14:3000/Publicacoes');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
@@ -68,7 +68,7 @@ class _MyApp extends State<MyApp> {
               scrollDirection: Axis.vertical,
               //Começa a criação
               itemBuilder: (BuildContext ctxt, int index) {
-                if(publicacoes[index].tipo.compareTo('0') == 0)
+                if(publicacoes[index].tipo.compareTo('texto') == 0)
                 {
                   return Container(
                     child: PostagemTexto(postagem: publicacoes[index]),
