@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Postagem {
   int id;
   String data;
@@ -28,7 +26,7 @@ class Postagem {
       this.idTopico,
       this.fotoTopico});
 
-  Postagem.fromJson(Map json) {
+  Postagem.fromJson(Map<String, dynamic> json) {
     id = json['IDPublicacao'];
     data = json['data'];
     tituloPublicacao = json['TituloPublicacao'];
@@ -70,9 +68,4 @@ class Postagem {
     data['foto'] = this.fotoTopico;
     return data;
   }
-}
-
-Postagem retornarUmaPostagem(String str) {
-  final jsonData = json.decode(str);
-  return Postagem.fromJson(jsonData);
 }

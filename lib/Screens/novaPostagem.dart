@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trab_malignous/API/Api.dart';
+import 'package:trab_malignous/Model/Topicos.dart';
 import 'informacaoUsuario.dart' as infoUsuario;
 
 class Formulario extends StatefulWidget {
@@ -67,7 +69,7 @@ class _Formulario extends State<Formulario> {
               children: [
                 //Primeira parte, o de texto
                 Container(
-                  //Cria o formulario
+                    //Cria o formulario
                     child: Form(
                   key: _chaveForm,
                   //Alinhar em coluna
@@ -79,80 +81,107 @@ class _Formulario extends State<Formulario> {
                       Padding(
                         //Margem no topo, na esqueda e em baixo
                         padding: EdgeInsets.only(
-                          //MediaQuery serve pra vc pegar o tamanho da tela ai vc multiplica pela porcentagem da tela que vc quer, isso ajuda para telas com tamanhos diferentes
+                            //MediaQuery serve pra vc pegar o tamanho da tela ai vc multiplica pela porcentagem da tela que vc quer, isso ajuda para telas com tamanhos diferentes
                             left: MediaQuery.of(context).size.width * 0.025,
                             bottom: MediaQuery.of(context).size.height * 0.01,
                             top: MediaQuery.of(context).size.height * 0.01),
                         child: Container(
                           //Agora começa mesmo o form, com o dropdownbutton
                           width: MediaQuery.of(context).size.width * 0.95,
-                          child: DropdownButtonFormField<String>(
-                            //Validador do dropdown, se estiver vazio retorna a falha e nao envia
-                            validator: (String value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Selecione um tópico válido';
-                              }
-                              return null;
-                            },
-                            //Decoração
-                            decoration: InputDecoration(
-                              //Muda a linha de baixo para cinza
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                color: Colors.grey[300],
-                              )),
-                              //Mema coisa só que quando selecionado
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                color: Colors.grey,
-                              )),
-                            ),
-                            //O texto que aparece dentro
-                            hint: Text(
-                              "Selecione o tópico",
-                              style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.023,
-                              ),
-                            ),
-                            //Os itens da dropdown, será sempre passado o value que seria o ID do topico
-                            items: [
-                              DropdownMenuItem(
-                                //Id
-                                value: "1",
-                                //Texto
-                                child: Text(
-                                  "First",
-                                  //Aparencia
-                                  style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.023,
+                          child: FutureBuilder(
+                              future: getTopicos(),
+                              builder: (context, projectSnap) {
+                                //funcionando
+                                var lista = new List();
+                                // for (var i = 0; i < projectSnap.data.length; i++) {
+                                //     lista.add(projectSnap.data[i].titulo);
+                                // }
+                                // lista.forEach((element) => print(element));
+                                lista = projectSnap.data.map((Topicos elemento) => elemento.titulo).toList();
+                                lista.forEach((element) => print(element.runtimeType));
+                                return DropdownButtonFormField<String>(
+                                  //Validador do dropdown, se estiver vazio retorna a falha e nao envia
+                                  validator: (String value) {
+                                    if (value?.isEmpty ?? true) {
+                                      return 'Selecione um tópico válido';
+                                    }
+                                    return null;
+                                  },
+                                  //Decoração
+                                  decoration: InputDecoration(
+                                    //Muda a linha de baixo para cinza
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey[300],
+                                    )),
+                                    //Mema coisa só que quando selecionado
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey,
+                                    )),
                                   ),
-                                ),
-                              ),
-                              //Mesma coisa q o de cima
-                              DropdownMenuItem(
-                                value: "2",
-                                child: Text(
-                                  "Second",
-                                  style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.023,
+                                  //O texto que aparece dentro
+                                  hint: Text(
+                                    "Selecione o tópico",
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.023,
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                            //Quando for selecionado algo mudar o valor da variavel para o que foi selecionado
-                            onChanged: (value) {
-                              setState(() {
-                                _valorDropdown = value;
-                              });
-                            },
-                            //Sempre que voce selecionar algo, o valor de dentro muda para o da selecao
-                            value: _valorDropdown,
-                          ),
+                                  items:[
+                                  //Os itens da dropdown, será sempre passado o value que seria o ID do topico
+                                    lista.map((items) {
+                                    print(items.titulo);
+                                    print(items.id);
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.titulo,
+                                          style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.023)),
+                                    );
+                                  }).toList(),
+
+                                    // DropdownMenuItem(
+                                    //   //Id
+                                    //   value: "1",
+                                    //   //Texto
+                                    //   child: Text(
+                                    //     "First",
+                                    //     //Aparencia
+                                    //     style: TextStyle(
+                                    //       fontSize:
+                                    //           MediaQuery.of(context).size.height *
+                                    //               0.023,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // //Mesma coisa q o de cima
+                                    // DropdownMenuItem(
+                                    //   value: "2",
+                                    //   child: Text(
+                                    //     "Second",
+                                    //     style: TextStyle(
+                                    //       fontSize:
+                                    //           MediaQuery.of(context).size.height *
+                                    //               0.023,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                  //Quando for selecionado algo mudar o valor da variavel para o que foi selecionado
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _valorDropdown = value;
+                                    });
+                                  },
+                                  //Sempre que voce selecionar algo, o valor de dentro muda para o da selecao
+                                  value: _valorDropdown,
+                                );
+                              }),
                         ),
                       ),
                       //Textbox do titulo
@@ -160,7 +189,7 @@ class _Formulario extends State<Formulario> {
                         //Margem pra esquerda pra nao ficar grudado
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).size.width * 0.03),
-                            //Tamanho
+                        //Tamanho
                         width: MediaQuery.of(context).size.width * 0.96,
                         //A caixa de texto em si
                         child: TextFormField(
@@ -168,7 +197,7 @@ class _Formulario extends State<Formulario> {
                           cursorColor: Color.fromRGBO(112, 112, 112, 1),
                           //Decoraçao
                           decoration: InputDecoration(
-                            //Texto de dentro
+                              //Texto de dentro
                               hintText: "Digite o titulo",
                               //Tamanho da letra
                               hintStyle: TextStyle(
@@ -185,7 +214,7 @@ class _Formulario extends State<Formulario> {
                                   borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                              //Tamanho maximo do titulo
+                          //Tamanho maximo do titulo
                           maxLength: 120,
                           //Tem tamanho maximo
                           maxLengthEnforced: true,
@@ -225,7 +254,7 @@ class _Formulario extends State<Formulario> {
                                   borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                              //Tamanho maximo
+                          //Tamanho maximo
                           maxLength: 1000,
                           maxLengthEnforced: true,
                           //Numero de linhas que vai aparecer, tenho que diminuir acho sei la
@@ -256,18 +285,23 @@ class _Formulario extends State<Formulario> {
                                         " " +
                                         _valorDropdown +
                                         " " +
-                                        _valorTexto.text + " " + infoUsuario.idUsuario.toString()),
+                                        _valorTexto.text +
+                                        " " +
+                                        infoUsuario.idUsuario.toString()),
                                   );
                                 },
                               );
                             }
                           },
                           //Texto do butao
-                          child: Text("Publicar",
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.023,
-                            color: Colors.white,
-                          ),),
+                          child: Text(
+                            "Publicar",
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.023,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       )
                     ],
@@ -282,6 +316,7 @@ class _Formulario extends State<Formulario> {
     );
   }
 }
+
 //Janela do video que nao foi feita
 class JanelaVideo extends StatelessWidget {
   Widget build(BuildContext context) {
