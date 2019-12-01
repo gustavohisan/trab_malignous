@@ -12,6 +12,7 @@ class Postagem {
   String tipo;
   int idUsuario;
   int idTopico;
+  String fotoTopico;
 
   Postagem(
       {this.id,
@@ -24,7 +25,8 @@ class Postagem {
       this.nomeUsuario,
       this.tituloTopico,
       this.idUsuario,
-      this.idTopico});
+      this.idTopico,
+      this.fotoTopico});
 
   Postagem.fromJson(Map json) {
     id = json['IDPublicacao'];
@@ -38,18 +40,19 @@ class Postagem {
     tituloTopico = json['TituloTopico'];
     idUsuario = json['id_usuario'];
     idTopico = json['id_topico'];
+    fotoTopico = json['foto'];
   }
-    // factory Postagem.fromJson(Map<String, dynamic> json) => new Postagem(
-    // id : json['id'],
-    // data : json['data'],
-    // titulo : json['titulo'],
-    // corpo : json['corpo'],
-    // situacao : json['situacao'],
-    // quantAvaliacoes : json['quant_avaliacoes'],
-    // tipo : json['tipo'],
-    // idUsuario : json['id_usuario'],
-    // idTopico : json['id_topico'],
-    // );
+  // factory Postagem.fromJson(Map<String, dynamic> json) => new Postagem(
+  // id : json['id'],
+  // data : json['data'],
+  // titulo : json['titulo'],
+  // corpo : json['corpo'],
+  // situacao : json['situacao'],
+  // quantAvaliacoes : json['quant_avaliacoes'],
+  // tipo : json['tipo'],
+  // idUsuario : json['id_usuario'],
+  // idTopico : json['id_topico'],
+  // );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -64,11 +67,12 @@ class Postagem {
     data['id_topico'] = this.idTopico;
     data['TituloTopico'] = this.tituloTopico;
     data['nome'] = this.nomeUsuario;
+    data['foto'] = this.fotoTopico;
     return data;
   }
 }
 
-  Postagem retornarUmaPostagem(String str){
-    final jsonData = json.decode(str);
-    return Postagem.fromJson(jsonData);
-  }
+Postagem retornarUmaPostagem(String str) {
+  final jsonData = json.decode(str);
+  return Postagem.fromJson(jsonData);
+}

@@ -19,12 +19,6 @@ class PostagemImagem extends StatefulWidget {
 class _PostagemImagem extends State<PostagemImagem> {
   bool botaoGostei = false;
 
-  /*Teste teste = Teste(
-    id: 1,
-    completed: "https://correio-cdn2.cworks.cloud/fileadmin/_processed_/0/a/csm_00_Hitech_Electric_EcoTech_Carro_Eletrico_na_Bahia_Foto_Carol_Dantas_Divulgacao_a7ecc750cc.jpg",
-    title: "testando",
-  );*/
-
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
@@ -49,7 +43,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                               image: new DecorationImage(
                                   fit: BoxFit.fill,
                                   image: new NetworkImage(
-                                      "https://i.imgur.com/BoN9kdC.png")))),
+                                      widget.postagem.fotoTopico)))),
                     ),
                   ),
                   Container(
@@ -65,23 +59,24 @@ class _PostagemImagem extends State<PostagemImagem> {
                                 fontFamily: 'Roboto',
                                 color: Color.fromRGBO(112, 112, 112, 1),
                                 fontSize:
-                                    MediaQuery.of(context).size.width * 0.035),
+                                    MediaQuery.of(context).size.width * 0.04),
                           ),
                         ),
                         Container(
                             width: MediaQuery.of(context).size.width * 0.75,
                             child: Text(
-                              "Publicado por " +
+                              "publicado por " +
                                   this
                                       .widget
                                       .postagem
                                       .nomeUsuario, //Apartir do id buscar o usuario
                               textAlign: TextAlign.left,
                               style: TextStyle(
+                                  fontWeight: FontWeight.w300,
                                   fontFamily: 'Roboto',
                                   color: Color.fromRGBO(112, 112, 112, 1),
                                   fontSize: MediaQuery.of(context).size.width *
-                                      0.028),
+                                      0.035),
                             )),
                       ],
                     ),
@@ -109,11 +104,9 @@ class _PostagemImagem extends State<PostagemImagem> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.width * 0.01),
-                      width: MediaQuery.of(context).size.width * 0.99,
+                      width: MediaQuery.of(context).size.width * 0.90,
                       margin: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.width * 0.05),
+                          vertical: MediaQuery.of(context).size.width * 0.04),
                       child: Text(
                         this.widget.postagem.tituloPublicacao,
                         softWrap: true,
@@ -121,15 +114,17 @@ class _PostagemImagem extends State<PostagemImagem> {
                         style: TextStyle(
                             fontFamily: 'Roboto',
                             color: Color.fromRGBO(112, 112, 112, 1),
-                            fontSize: MediaQuery.of(context).size.width * 0.05),
+                            fontWeight: FontWeight.w500,
+                            fontSize: MediaQuery.of(context).size.width * 0.06),
                       ),
                     ),
                     Container(
                       child: Stack(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
-                            child:Center(child: CircularProgressIndicator()),
+                            padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.1),
+                            child: Center(child: CircularProgressIndicator()),
                           ),
                           Center(
                             child: FadeInImage.memoryNetwork(
@@ -149,7 +144,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                     child: IconButton(
                       icon: Icon(
                         Icons.thumb_up,
-                        size: MediaQuery.of(context).size.width * 0.075,
+                        size: MediaQuery.of(context).size.height * 0.04,
                         color: this.botaoGostei
                             ? Colors.blue
                             : Color.fromRGBO(112, 112, 112, 1),
@@ -161,7 +156,6 @@ class _PostagemImagem extends State<PostagemImagem> {
                         // setState(() {
                         //   if (!this.botaoGostei) {
                         //     this.botaoGostei = true;
-                        //     //this.botaoNGostei = false;
                         //     likeCounter++;
                         //   } else {
                         //     this.botaoGostei = false;
@@ -170,18 +164,19 @@ class _PostagemImagem extends State<PostagemImagem> {
                         // });
                       },
                     ),
-                    width: MediaQuery.of(context).size.width * 0.12,
+                    width: MediaQuery.of(context).size.width * 0.13,
                   ),
                   Container(
                     child: Text(
-                      this.widget.postagem.quantAvaliacoes.toString(),
+                      widget.postagem.quantAvaliacoes.toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Roboto',
                           color: Color.fromRGBO(112, 112, 112, 1),
-                          fontSize: MediaQuery.of(context).size.width * 0.035),
+                          fontSize: MediaQuery.of(context).size.width * 0.045,
+                          fontWeight: FontWeight.w500),
                     ),
-                    width: MediaQuery.of(context).size.width * 0.14,
+                    width: MediaQuery.of(context).size.width * 0.15,
                   ),
                   // Container(
                   //   child: IconButton(
@@ -213,23 +208,23 @@ class _PostagemImagem extends State<PostagemImagem> {
                     child: IconButton(
                         icon: Icon(
                           Icons.comment,
-                          size: MediaQuery.of(context).size.width * 0.08,
+                          size: MediaQuery.of(context).size.width * 0.09,
                         ),
                         alignment: Alignment.centerRight,
                         onPressed: () {},
                         color: Color.fromRGBO(112, 112, 112, 1)),
-                    width: MediaQuery.of(context).size.width * 0.60,
+                    width: MediaQuery.of(context).size.width * 0.53,
                   ),
                   Container(
                     child: Text(
                       "1000",
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.right,
                       style: TextStyle(
                           fontFamily: 'Roboto',
                           color: Color.fromRGBO(112, 112, 112, 1),
-                          fontSize: MediaQuery.of(context).size.width * 0.035),
+                          fontSize: MediaQuery.of(context).size.width * 0.045,
+                          fontWeight: FontWeight.w500),
                     ),
-                    width: MediaQuery.of(context).size.width * 0.10,
                   ),
                 ],
               ),

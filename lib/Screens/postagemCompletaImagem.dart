@@ -16,6 +16,8 @@ class PostagemCompletaImagem extends StatefulWidget {
 }
 
 class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
+  String _selecionadoOrdem;
+
   @override
   Widget build(BuildContext context) {
     String dataConvertida = DateFormat('dd/MM/yyyy – kk:mm')
@@ -41,7 +43,12 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
               children: <Widget>[
                 Stack(
                   children: [
-                    Center(child: CircularProgressIndicator()),
+                    Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.05,
+                            top: MediaQuery.of(context).size.height * 0.1),
+  
+                        child: Center(child: CircularProgressIndicator())),
                     Center(
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
@@ -88,7 +95,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                                       image: new DecorationImage(
                                           fit: BoxFit.fill,
                                           image: new NetworkImage(
-                                              "https://i.imgur.com/BoN9kdC.png")))),
+                                              widget.postagem.fotoTopico)))),
                               Padding(
                                 padding: EdgeInsets.only(
                                     left: MediaQuery.of(context).size.width *
@@ -138,13 +145,13 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                 Container(
                   padding: EdgeInsets.only(
                       left: MediaQuery.of(context).size.height * 0.02,
-                      top: MediaQuery.of(context).size.height * 0.04),
+                      top: MediaQuery.of(context).size.height * 0.02),
                   child: Row(
                     children: <Widget>[
                       IconButton(
                         icon: Icon(Icons.thumb_up),
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        iconSize: MediaQuery.of(context).size.height * 0.05,
+                        iconSize: MediaQuery.of(context).size.height * 0.033,
                         onPressed: () {},
                       ),
                       Text(
@@ -152,6 +159,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                         style: TextStyle(
                           color: Color.fromRGBO(112, 112, 112, 1),
                           fontSize: MediaQuery.of(context).size.height * 0.027,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Container(
@@ -159,7 +167,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                         child: IconButton(
                             icon: Icon(
                               Icons.comment,
-                              size: MediaQuery.of(context).size.width * 0.08,
+                              size: MediaQuery.of(context).size.width * 0.06,
                             ),
                             alignment: Alignment.centerRight,
                             onPressed: () {},
@@ -170,6 +178,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                         style: TextStyle(
                           color: Color.fromRGBO(112, 112, 112, 1),
                           fontSize: MediaQuery.of(context).size.height * 0.027,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -179,18 +188,123 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.02),
                   child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      color: Colors.grey,
-                      child: Text(
-                        "Comentários",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.03,
-                          fontWeight: FontWeight.w500,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    color: Colors.grey.shade300,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.05),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Comentários",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.025,
+                                fontWeight: FontWeight.w600,
+                                color: Color.fromRGBO(112, 112, 112, 1),
+                              ),
+                            ),
+                          ),
                         ),
-                      )),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.3),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selecionadoOrdem,
+                                onChanged: (String valor) {
+                                  setState(() {
+                                    _selecionadoOrdem = valor;
+                                  });
+                                },
+                                //O texto que aparece dentro
+                                hint: Text(
+                                  "Ordenar por",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            0.02,
+                                    color: Color.fromRGBO(112, 112, 112, 1),
+                                  ),
+                                ),
+                                //Os itens da dropdown, será sempre passado o value que seria o ID do topico
+                                items: [
+                                  DropdownMenuItem(
+                                    //Id
+                                    value: "1",
+                                    //Texto
+                                    child: Text(
+                                      "Melhores",
+                                      //Aparencia
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                        color: Color.fromRGBO(112, 112, 112, 1),
+                                      ),
+                                    ),
+                                  ),
+                                  //Mesma coisa q o de cima
+                                  DropdownMenuItem(
+                                    value: "2",
+                                    child: Text(
+                                      "Novos",
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                        color: Color.fromRGBO(112, 112, 112, 1),
+                                      ),
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "3",
+                                    child: Text(
+                                      "Antigos",
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                        color: Color.fromRGBO(112, 112, 112, 1),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+                Container(                  
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Comentários indisponiveis no momento.",
+                            style: TextStyle(
+                              color: Color.fromRGBO(112, 112, 112, 1),
+                            ),
+                          ),
+                          Icon(Icons.sentiment_dissatisfied,
+                          size: MediaQuery.of(context).size.width * 0.1,
+                          color: Color.fromRGBO(112, 112, 112, 1),)
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
