@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:http/http.dart' as http;
-import 'package:trab_malignous/Screens/postagemCompletaImagem.dart';
 import 'package:trab_malignous/Screens/postagemMeuPerfilEditar.dart';
 import '../Model/Postagem.dart';
-import 'dart:convert' as JSON;
 import 'package:transparent_image/transparent_image.dart';
 
 class PostagemMeuPerfilImagem extends StatefulWidget {
@@ -153,16 +150,13 @@ class _PostagemMeuPerfilImagem extends State<PostagemMeuPerfilImagem> {
                       alignment: Alignment.centerRight,
                       color: Color.fromRGBO(112, 112, 112, 1),
                       onPressed: () {
-                        //Precisa arrumar
-                        // setState(() {
-                        //   if (!this.botaoGostei) {
-                        //     this.botaoGostei = true;
-                        //     likeCounter++;
-                        //   } else {
-                        //     this.botaoGostei = false;
-                        //     likeCounter--;
-                        //   }
-                        // });
+                        setState(() {
+                          if (!this.botaoGostei) {
+                            this.botaoGostei = true;
+                          } else {
+                            this.botaoGostei = false;
+                          }
+                        });
                       },
                     ),
                     width: MediaQuery.of(context).size.width * 0.13,
@@ -179,32 +173,6 @@ class _PostagemMeuPerfilImagem extends State<PostagemMeuPerfilImagem> {
                     ),
                     width: MediaQuery.of(context).size.width * 0.15,
                   ),
-                  // Container(
-                  //   child: IconButton(
-                  //       icon: Icon(
-                  //         Icons.sentiment_dissatisfied,
-                  //         size: 30,
-                  //         color: this.botaoNGostei
-                  //             ? Colors.red
-                  //             : Color.fromRGBO(112, 112, 112, 1),
-                  //       ),
-                  //       alignment: Alignment.centerRight,
-                  //       onPressed: () {
-                  //         //Precisa arrumar
-                  //         setState(() {
-                  //           if (!this.botaoNGostei) {
-                  //             this.botaoNGostei = true;
-                  //             this.botaoGostei = false;
-                  //             likeCounter--;
-                  //           } else {
-                  //             likeCounter++;
-                  //             this.botaoNGostei = false;
-                  //           }
-                  //         });
-                  //       },
-                  //       color: Color.fromRGBO(112, 112, 112, 1)),
-                  //   width: MediaQuery.of(context).size.width * 0.12,
-                  // ),
                   Container(
                     child: IconButton(
                         icon: Icon(

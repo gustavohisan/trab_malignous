@@ -3,7 +3,7 @@ import 'package:trab_malignous/Model/Postagem.dart';
 import 'package:trab_malignous/Model/Topicos.dart';
 import 'package:trab_malignous/Screens/informacaoUsuario.dart';
 
-Uri url = Uri.parse('http://192.168.0.16:3000');
+Uri url = Uri.parse('http://192.168.0.14:3000');
 
 Future<List<Postagem>> getPostagens() async {
   Response response = await Dio().request(url.toString() + '/Publicacoes',
@@ -50,7 +50,7 @@ Future<bool> atualizarPostagem(int id, String corpo) async {
   }
 }
 
-Future<bool> postTexto(String titulo, String corpoDaPublicacao,
+void postTexto(String titulo, String corpoDaPublicacao,
     String tituloTopico, int idDoUsuario) async {
   Response response = await Dio().request(
       url.toString() + '/idDoTopicoPorNome/' + tituloTopico,
@@ -66,16 +66,11 @@ Future<bool> postTexto(String titulo, String corpoDaPublicacao,
     idTopico: topico.id,
   ).toJson();
   print(postagem.toString());
-  Response post = await Dio().request(
+   await Dio().request(
     url.toString() + '/CriarNovaPublicacao',
     options: Options(headers: {"Accept": "application/json"}, method: 'POST'),
     data: postagem,
   );
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 Future<List<Topicos>> getTopicos() async {
