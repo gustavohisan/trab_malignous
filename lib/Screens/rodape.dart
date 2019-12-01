@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'novaPostagem.dart';
+import 'package:trab_malignous/main.dart';
 
 class Rodape extends StatefulWidget {
   @override

@@ -48,26 +48,27 @@ class _MyApp extends State<MyApp> {
             child: FutureBuilder(
                 future: getPostagens(),
                 builder: (context, projectSnap) {
-                  return projectSnap.hasData ? 
-                      ListView.builder(
-                      itemCount: projectSnap.data.length,
-                      //Scroll vertical
-                      scrollDirection: Axis.vertical,
-                      //Começa a criação
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        if (projectSnap.data[index].tipo.compareTo('texto') ==
-                            0) {
-                          return Container(
-                            child: PostagemTexto(
-                                postagem: projectSnap.data[index]),
-                          );
-                        } else {
-                          return Container(
-                            child: PostagemImagem(
-                                postagem: projectSnap.data[index]),
-                          );
-                        }
-                      })
+                  return projectSnap.hasData
+                      ? ListView.builder(
+                          itemCount: projectSnap.data.length,
+                          //Scroll vertical
+                          scrollDirection: Axis.vertical,
+                          //Começa a criação
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            if (projectSnap.data[index].tipo
+                                    .compareTo('texto') ==
+                                0) {
+                              return Container(
+                                child: PostagemTexto(
+                                    postagem: projectSnap.data[index]),
+                              );
+                            } else {
+                              return Container(
+                                child: PostagemImagem(
+                                    postagem: projectSnap.data[index]),
+                              );
+                            }
+                          })
                       : Center(child: CircularProgressIndicator());
                 }),
           ),
@@ -80,7 +81,15 @@ class _MyApp extends State<MyApp> {
     );
   }
 
-  Future<Null> _recarregar() async{ 
-  setState(() {});
+  Future<Null> _recarregar() async {
+    setState(() => MyApp);
+  }
 }
+
+class _Teste extends State<MyApp>{
+    Widget build(BuildContext context) {
+      return Text("Teste");
+    }
 }
+
+

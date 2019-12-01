@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:trab_malignous/Screens/postagemCompletaTexto.dart';
 import '../Model/Postagem.dart';
 
 class PostagemTexto extends StatefulWidget {
@@ -26,19 +27,21 @@ class _PostagemTexto extends State<PostagemTexto> {
             Row(
               children: <Widget>[
                 Container(
-                  child: 
-                  Padding(
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.02, right: MediaQuery.of(context).size.width * 0.02),
-                    child:Container(
-                      width: MediaQuery.of(context).size.height * 0.05,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: new NetworkImage(
-                                  "https://i.imgur.com/BoN9kdC.png")))),
-                ),),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.02,
+                        right: MediaQuery.of(context).size.width * 0.02),
+                    child: Container(
+                        width: MediaQuery.of(context).size.height * 0.05,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: new NetworkImage(
+                                    widget.postagem.fotoTopico)))),
+                  ),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.70,
                   child: Column(
@@ -52,29 +55,28 @@ class _PostagemTexto extends State<PostagemTexto> {
                               fontFamily: 'Roboto',
                               color: Color.fromRGBO(112, 112, 112, 1),
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.035),
+                                  MediaQuery.of(context).size.width * 0.04),
                         ),
                       ),
-                      
                       Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Text(
-                            "Publicado por " +
+                            "publicado por " +
                                 this
                                     .widget
                                     .postagem
                                     .nomeUsuario, //Apartir do id buscar o usuario
                             textAlign: TextAlign.left,
                             style: TextStyle(
+                                fontWeight: FontWeight.w300,
                                 fontFamily: 'Roboto',
                                 color: Color.fromRGBO(112, 112, 112, 1),
                                 fontSize:
-                                    MediaQuery.of(context).size.width * 0.028),
+                                    MediaQuery.of(context).size.width * 0.035),
                           )),
                     ],
                   ),
                 ),
-                
                 Container(
                   width: MediaQuery.of(context).size.width * 0.10,
                   child: IconButton(
@@ -86,34 +88,47 @@ class _PostagemTexto extends State<PostagemTexto> {
                 ),
               ],
             ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.width * 0.01),
-              width: MediaQuery.of(context).size.width * 0.99,
-              margin: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.width * 0.05),
-              child: Text(
-                this.widget.postagem.tituloPublicacao,
-                softWrap: true,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Roboto',
-                    color: Color.fromRGBO(112, 112, 112, 1),
-                    fontSize: MediaQuery.of(context).size.width * 0.05),
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.99,
-              height: MediaQuery.of(context).size.width * 0.80,
-              color: Colors.black12,
-              child: Text(
-                this.widget.postagem.corpo,
-                softWrap: true,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Roboto',
-                    color: Color.fromRGBO(112, 112, 112, 1),
-                    fontSize: MediaQuery.of(context).size.width * 0.05),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostagemCompletaTexto(
+                              postagem: widget.postagem,
+                            )));
+              },
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.90,
+                    margin: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.width * 0.04),
+                    child: Text(
+                      this.widget.postagem.tituloPublicacao,
+                      softWrap: true,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Color.fromRGBO(112, 112, 112, 1),
+                          fontWeight: FontWeight.w500,
+                          fontSize: MediaQuery.of(context).size.width * 0.06),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.90,
+                    child: Text(
+                      this.widget.postagem.corpo,
+                      softWrap: true,
+                      textAlign: TextAlign.left,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Color.fromRGBO(112, 112, 112, 0.8),
+                          fontSize: MediaQuery.of(context).size.width * 0.04),
+                    ),
+                  ),
+                ],
               ),
             ),
             Row(
@@ -122,7 +137,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                   child: IconButton(
                     icon: Icon(
                       Icons.thumb_up,
-                      size: 30,
+                      size: MediaQuery.of(context).size.height * 0.04,
                       color: this.botaoGostei
                           ? Colors.blue
                           : Color.fromRGBO(112, 112, 112, 1),
@@ -139,40 +154,41 @@ class _PostagemTexto extends State<PostagemTexto> {
                       });
                     },
                   ),
-                  width: MediaQuery.of(context).size.width * 0.12,
+                  width: MediaQuery.of(context).size.width * 0.15,
                 ),
                 Container(
                   child: Text(
-                    this.widget.postagem.quantAvaliacoes.toString(),
+                    widget.postagem.quantAvaliacoes.toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: MediaQuery.of(context).size.width * 0.035),
+                        fontSize: MediaQuery.of(context).size.width * 0.045,
+                        fontWeight: FontWeight.w500),
                   ),
-                  width: MediaQuery.of(context).size.width * 0.14,
+                  width: MediaQuery.of(context).size.width * 0.15,
                 ),
                 Container(
                   child: IconButton(
                       icon: Icon(
                         Icons.comment,
-                        size: MediaQuery.of(context).size.width * 0.08,
+                        size: MediaQuery.of(context).size.width * 0.09,
                       ),
                       alignment: Alignment.centerRight,
                       onPressed: () {},
                       color: Color.fromRGBO(112, 112, 112, 1)),
-                  width: MediaQuery.of(context).size.width * 0.60,
+                  width: MediaQuery.of(context).size.width * 0.50,
                 ),
                 Container(
                   child: Text(
                     "1000",
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.right,
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: MediaQuery.of(context).size.width * 0.035),
+                        fontSize: MediaQuery.of(context).size.width * 0.045,
+                        fontWeight: FontWeight.w500),
                   ),
-                  width: MediaQuery.of(context).size.width * 0.10,
                 ),
               ],
             ),
