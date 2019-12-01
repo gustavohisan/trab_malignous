@@ -6,6 +6,7 @@ import 'Screens/rodape.dart';
 import 'Screens/cabecalho.dart';
 import 'package:flutter/services.dart';
 import 'package:trab_malignous/API/Api.dart';
+import 'Screens/meuPerfil.dart';
 
 void main() => runApp(MyApp());
 final GlobalKey<RefreshIndicatorState> _recarregarInicioChave =
@@ -47,32 +48,37 @@ class _MyApp extends State<MyApp> {
           child: RefreshIndicator(
             key: _recarregarInicioChave,
             onRefresh: _recarregar,
-            child: FutureBuilder(
-                future: getPostagens(),
-                builder: (context, projectSnap) {
-                  return projectSnap.hasData
-                      ? ListView.builder(
-                          itemCount: projectSnap.data.length,
-                          //Scroll vertical
-                          scrollDirection: Axis.vertical,
-                          //Começa a criação
-                          itemBuilder: (BuildContext ctxt, int index) {
-                            if (projectSnap.data[index].tipo
-                                    .compareTo('texto') ==
-                                0) {
-                              return Container(
-                                child: PostagemTexto(
-                                    postagem: projectSnap.data[index]),
-                              );
-                            } else {
-                              return Container(
-                                child: PostagemImagem(
-                                    postagem: projectSnap.data[index]),
-                              );
-                            }
-                          })
-                      : Center(child: CircularProgressIndicator());
-                }),
+            child: PageView(
+              children: <Widget>[
+                FutureBuilder(
+                    future: getPostagens(),
+                    builder: (context, projectSnap) {
+                      return projectSnap.hasData
+                          ? ListView.builder(
+                              itemCount: projectSnap.data.length,
+                              //Scroll vertical
+                              scrollDirection: Axis.vertical,
+                              //Começa a criação
+                              itemBuilder: (BuildContext ctxt, int index) {
+                                if (projectSnap.data[index].tipo
+                                        .compareTo('texto') ==
+                                    0) {
+                                  return Container(
+                                    child: PostagemTexto(
+                                        postagem: projectSnap.data[index]),
+                                  );
+                                } else {
+                                  return Container(
+                                    child: PostagemImagem(
+                                        postagem: projectSnap.data[index]),
+                                  );
+                                }
+                              })
+                          : Center(child: CircularProgressIndicator());
+                    }),
+                MeuPerfil(),
+              ],
+            ),
           ),
         ),
         //Criação do rodape
@@ -87,11 +93,3 @@ class _MyApp extends State<MyApp> {
     setState(() => MyApp);
   }
 }
-
-class _Teste extends State<MyApp>{
-    Widget build(BuildContext context) {
-      return Text("Teste");
-    }
-}
-
-
