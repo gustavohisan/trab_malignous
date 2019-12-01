@@ -86,10 +86,3 @@ class _MyApp extends State<MyApp> {
   }
 }
 
-class _Teste extends State<MyApp>{
-    Widget build(BuildContext context) {
-      return Text("Teste");
-    }
-}
-
-

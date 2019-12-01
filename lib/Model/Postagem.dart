@@ -56,13 +56,13 @@ class Postagem {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['IDPublicacao'] = this.id;
     data['data'] = this.data;
-    data['TituloPublicacao'] = this.tituloPublicacao;
+    data['tituloPublicacao'] = this.tituloPublicacao;
     data['corpo'] = this.corpo;
     data['situacao'] = this.situacao;
     data['quant_avaliacoes'] = this.quantAvaliacoes;
     data['tipo'] = this.tipo;
-    data['id_usuario'] = this.idUsuario;
-    data['id_topico'] = this.idTopico;
+    data['idUsuario'] = this.idUsuario;
+    data['idTopico'] = this.idTopico;
     data['TituloTopico'] = this.tituloTopico;
     data['nome'] = this.nomeUsuario;
     data['foto'] = this.fotoTopico;
