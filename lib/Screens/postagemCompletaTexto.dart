@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Model/Postagem.dart';
-import 'informacaoUsuario.dart' as infoUsuario;
-import 'package:photo_view/photo_view.dart';
 import 'package:intl/intl.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class PostagemCompletaTexto extends StatefulWidget {
   final Postagem postagem;
