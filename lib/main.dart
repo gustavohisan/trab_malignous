@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Model/Postagem.dart';
 import 'Screens/postagemImagem.dart';
 import 'Screens/postagemTexto.dart';
 import 'Screens/rodape.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:trab_malignous/API/Api.dart';
 
 void main() => runApp(MyApp());
-final GlobalKey<RefreshIndicatorState> _recarregarInicioChave = new GlobalKey<RefreshIndicatorState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -16,6 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
+  final GlobalKey<RefreshIndicatorState> _recarregarInicioChave = new GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     super.initState();
