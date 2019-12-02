@@ -95,10 +95,10 @@ Future<Postagem> getPostagemID(int id) async {
 
 void avaliar(int id) async {
   await Dio().post(url.toString() + '/Avaliacoes',
-      data: {"avaliacao": 1, "id_comentario": id, "id_usuario": idUsuario});
+      data: {"avaliacao": 1, "id_publicacao": id, "id_usuario": idUsuario});
 }
 
 void desavaliar(int id) async {
   await Dio().delete(url.toString() + '/ApagarAvaliacao',
-      data: {"id_comentario": id, "id_usuario": idUsuario});
+      data: {"id_publicacao": id, "id_usuario": idUsuario});
 }
