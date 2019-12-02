@@ -3,7 +3,7 @@ import 'package:trab_malignous/Model/Postagem.dart';
 import 'package:trab_malignous/Model/Topicos.dart';
 import 'package:trab_malignous/Screens/informacaoUsuario.dart';
 
-Uri url = Uri.parse('http://192.168.0.14:3000');
+Uri url = Uri.parse('http://10.0.2.2:3000');
 
 Future<List<Postagem>> getPostagens() async {
   Response response = await Dio().request(url.toString() + '/Publicacoes',
@@ -42,6 +42,28 @@ Future<bool> arquivarPostagem(int id) async {
 Future<bool> atualizarPostagem(int id, String corpo) async {
   final response = await Dio().patch(url.toString() + '/AtualizarPublicacao',
       data: {"id": id, "corpo": corpo});
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> aumentarCurtidas(int id) async {
+  final response = await Dio().patch(url.toString() + '/AumentarCurtidas',
+      data: {"id": id});
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> diminuirCurtidas(int id) async {
+  final response = await Dio().patch(url.toString() + '/DiminuirCurtidas',
+      data: {"id": id});
 
   if (response.statusCode == 200) {
     return true;

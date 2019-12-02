@@ -150,9 +150,11 @@ class _PostagemTexto extends State<PostagemTexto> {
                       setState(() {
                         if (!this.botaoGostei) {
                             avaliar(widget.postagem.id);
+                            aumentarCurtidas(widget.postagem.id);
                             this.botaoGostei = true;
                           } else {
                             desavaliar(widget.postagem.id);
+                            diminuirCurtidas(widget.postagem.id);
                             this.botaoGostei = false;
                           }
                       });
