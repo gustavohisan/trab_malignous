@@ -50,8 +50,8 @@ Future<bool> atualizarPostagem(int id, String corpo) async {
   }
 }
 
-void postTexto(String titulo, String corpoDaPublicacao,
-    String tituloTopico, int idDoUsuario) async {
+void postTexto(String titulo, String corpoDaPublicacao, String tituloTopico,
+    int idDoUsuario) async {
   Response response = await Dio().request(
       url.toString() + '/idDoTopicoPorNome/' + tituloTopico,
       options: Options(headers: {"Accept": "application/json"}, method: 'GET'));
@@ -66,7 +66,7 @@ void postTexto(String titulo, String corpoDaPublicacao,
     idTopico: topico.id,
   ).toJson();
   print(postagem.toString());
-   await Dio().request(
+  await Dio().request(
     url.toString() + '/CriarNovaPublicacao',
     options: Options(headers: {"Accept": "application/json"}, method: 'POST'),
     data: postagem,
