@@ -29,8 +29,8 @@ class _MyApp extends State<MyApp> {
   Widget build(BuildContext context) {
     //Isso aqui é a cor do cabeçalho e rodapé do android, não esquece de mudar no fim
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Color.fromRGBO(74, 65, 42, 1), // Barra de baixo
-      statusBarColor: Colors.purple[300], // Barra de cima
+      systemNavigationBarColor: Colors.white, // Barra de baixo
+      statusBarColor: Color.fromRGBO(112, 112, 112, 1), // Barra de cima
     ));
     return MaterialApp(
       //Nao aparecer debug

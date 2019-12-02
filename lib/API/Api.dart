@@ -30,7 +30,7 @@ Future<List<Postagem>> getMinhasPublicacoes() async {
 
 Future<bool> arquivarPostagem(int id) async {
   final response = await Dio()
-      .post(url.toString() + '/ArquivarPublicacao', data: {"id": id});
+      .patch(url.toString() + '/ArquivarPublicacao', data: {"id": id});
 
   if (response.statusCode == 200) {
     return true;
@@ -40,7 +40,7 @@ Future<bool> arquivarPostagem(int id) async {
 }
 
 Future<bool> atualizarPostagem(int id, String corpo) async {
-  final response = await Dio().post(url.toString() + '/AtualizarPublicacao',
+  final response = await Dio().patch(url.toString() + '/AtualizarPublicacao',
       data: {"id": id, "corpo": corpo});
 
   if (response.statusCode == 200) {
