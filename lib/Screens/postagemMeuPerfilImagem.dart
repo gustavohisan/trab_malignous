@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:trab_malignous/Screens/postagemMeuPerfilEditar.dart';
 import '../Model/Postagem.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:intl/intl.dart';
 
 class PostagemMeuPerfilImagem extends StatefulWidget {
   final Postagem postagem;
@@ -19,6 +20,8 @@ class _PostagemMeuPerfilImagem extends State<PostagemMeuPerfilImagem> {
 
   @override
   Widget build(BuildContext context) {
+    String dataConvertida = DateFormat('dd/MM/yyyy – kk:mm')
+        .format(DateTime.parse(widget.postagem.data));
     return Column(children: <Widget>[
       Container(
           margin: EdgeInsets.symmetric(
@@ -63,11 +66,8 @@ class _PostagemMeuPerfilImagem extends State<PostagemMeuPerfilImagem> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.75,
                             child: Text(
-                              "publicado por " +
-                                  this
-                                      .widget
-                                      .postagem
-                                      .nomeUsuario, //Apartir do id buscar o usuario
+                              "publicado em " +
+                                  dataConvertida, //Apartir do id buscar o usuario
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontWeight: FontWeight.w300,

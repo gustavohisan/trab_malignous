@@ -115,9 +115,6 @@ class _PostagemMeuPerfilEditar extends State<PostagemMeuPerfilEditar> {
                           color: Color.fromRGBO(112, 112, 112, 1),
                         ),
                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'A publicação não pode estar vazia';
-                          }
                           if (value == widget.postagem.corpo) {
                             return 'A publicação está igual';
                           }
