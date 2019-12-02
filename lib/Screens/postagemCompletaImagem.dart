@@ -211,7 +211,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.3),
+                              left: MediaQuery.of(context).size.width * 0.25),
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: DropdownButtonHideUnderline(
@@ -308,16 +308,6 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
             ),
           ),
         ),
-        /*
-        PhotoView(
-          imageProvider: NetworkImage(widget.postagem.corpo),
-          backgroundDecoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          enableRotation: false,
-          minScale: MediaQuery.of(context).size.width / MediaQuery.of(context).size.height,
-        ),
-        */
       ),
     );
   }

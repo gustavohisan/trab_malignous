@@ -45,7 +45,7 @@ class _Formulario extends State<Formulario> {
               //Definimos as cores
               indicatorColor: Colors.black,
               //Tem que mudar isso
-              labelColor: Colors.cyan,
+              labelColor: Color.fromRGBO(112, 112, 112, 1),
               //As tabs em si
               tabs: [
                 Tab(
@@ -256,7 +256,7 @@ class _Formulario extends State<Formulario> {
                                 //tira sombra
                                 elevation: 0,
                                 //cor tem que mudar
-                                color: Colors.cyan,
+                                color: Colors.grey.shade300,
                                 //funcao quando clicado
                                 onPressed: () {
                                   //se for invalidado o estado da chave do formulario, isso quer dizer se os validator retornarem corretamente
@@ -278,7 +278,7 @@ class _Formulario extends State<Formulario> {
                                     fontSize:
                                         MediaQuery.of(context).size.height *
                                             0.023,
-                                    color: Colors.white,
+                                    color: Color.fromRGBO(112, 112, 112, 1),
                                   ),
                                 ),
                               ),
@@ -287,7 +287,7 @@ class _Formulario extends State<Formulario> {
                         ),
                       )),
                       //Formularios otro
-                      Icon(Icons.directions_bike),
+                      JanelaVideo(),
                       JanelaVideo(),
                     ],
                   );

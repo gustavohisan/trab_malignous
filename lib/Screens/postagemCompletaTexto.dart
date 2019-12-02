@@ -195,7 +195,7 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.3),
+                            left: MediaQuery.of(context).size.width * 0.25),
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: DropdownButtonHideUnderline(
