@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:trab_malignous/Screens/postagemCompletaTexto.dart';
 import '../Model/Postagem.dart';
+import 'package:trab_malignous/API/Api.dart';
+
 
 class PostagemTexto extends StatefulWidget {
   final Postagem postagem;
@@ -147,10 +149,12 @@ class _PostagemTexto extends State<PostagemTexto> {
                     onPressed: () {
                       setState(() {
                         if (!this.botaoGostei) {
-                          this.botaoGostei = true;
-                        } else {
-                          this.botaoGostei = false;
-                        }
+                            avaliar(widget.postagem.id);
+                            this.botaoGostei = true;
+                          } else {
+                            desavaliar(widget.postagem.id);
+                            this.botaoGostei = false;
+                          }
                       });
                     },
                   ),

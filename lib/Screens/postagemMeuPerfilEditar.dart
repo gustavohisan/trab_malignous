@@ -97,6 +97,23 @@ class _PostagemMeuPerfilEditar extends State<PostagemMeuPerfilEditar> {
                     child: Form(
                       key: _chaveForm,
                       child: TextFormField(
+                        cursorColor: Colors.grey,
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Colors.grey[300],
+                          )),
+                          //Mema coisa só que quando selecionado
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromRGBO(112, 112, 112, 1),
+                        ),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'A publicação não pode estar vazia';
@@ -113,27 +130,74 @@ class _PostagemMeuPerfilEditar extends State<PostagemMeuPerfilEditar> {
                     )),
                 Row(
                   children: <Widget>[
-                    FlatButton(
-                      color: Colors.grey.shade100,
-                      child: Text(
-                        "Atualizar",
-                        style: TextStyle(
-                          color: Color.fromRGBO(112, 112, 112, 1),
-                          fontSize: MediaQuery.of(context).size.height * 0.022,
-                          fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02,
+                          left: MediaQuery.of(context).size.width * 0.1),
+                      child: Container(
+                        child: FlatButton(
+                          color: Colors.grey.shade100,
+                          child: Text(
+                            "Atualizar",
+                            style: TextStyle(
+                              color: Color.fromRGBO(112, 112, 112, 1),
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.022,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          onPressed: () {
+                            if (_chaveForm.currentState.validate()) {
+                              atualizarPostagem(
+                                      widget.postagem.id, myController.text)
+                                  .then((value) {
+                                String texto;
+                                if (value) {
+                                  texto = "Atualizado com sucesso";
+                                } else {
+                                  texto = "Arquivado com sucesso";
+                                }
+                                Navigator.of(context).pop();
+                                return showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      // Retrieve the text the that user has entered by using the
+                                      // TextEditingController.
+                                      content: Text(texto),
+                                    );
+                                  },
+                                );
+                              });
+                            }
+                          },
                         ),
                       ),
-                      onPressed: () {
-                        if (_chaveForm.currentState.validate()) {
-                          atualizarPostagem(
-                                  widget.postagem.id, myController.text)
-                              .then((value) {
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02,
+                          left: MediaQuery.of(context).size.width * 0.2),
+                      child: FlatButton(
+                        color: Colors.grey.shade100,
+                        child: Text(
+                          "Arquivar",
+                          style: TextStyle(
+                            color: Color.fromRGBO(112, 112, 112, 1),
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.022,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onPressed: () {
+                          arquivarPostagem(widget.postagem.id).then((value) {
                             String texto;
                             if (value) {
-                              texto = "Atualizado com sucesso";
+                              texto = "Arquivado com sucesso";
                             } else {
                               texto = "Arquivado com sucesso";
                             }
+                            Navigator.of(context).pop();
                             return showDialog(
                               context: context,
                               builder: (context) {
@@ -145,39 +209,8 @@ class _PostagemMeuPerfilEditar extends State<PostagemMeuPerfilEditar> {
                               },
                             );
                           });
-                        }
-                      },
-                    ),
-                    FlatButton(
-                      color: Colors.grey.shade100,
-                      child: Text(
-                        "Arquivar",
-                        style: TextStyle(
-                          color: Color.fromRGBO(112, 112, 112, 1),
-                          fontSize: MediaQuery.of(context).size.height * 0.022,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        },
                       ),
-                      onPressed: () {
-                        arquivarPostagem(widget.postagem.id).then((value) {
-                          String texto;
-                          if (value) {
-                            texto = "Deu certo";
-                          } else {
-                            texto = "Nao de certo";
-                          }
-                          return showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                // Retrieve the text the that user has entered by using the
-                                // TextEditingController.
-                                content: Text(texto),
-                              );
-                            },
-                          );
-                        });
-                      },
                     ),
                   ],
                 )

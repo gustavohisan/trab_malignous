@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:trab_malignous/API/Api.dart';
 import 'package:trab_malignous/Screens/postagemCompletaImagem.dart';
 import '../Model/Postagem.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -152,8 +153,10 @@ class _PostagemImagem extends State<PostagemImagem> {
                       onPressed: () {
                         setState(() {
                           if (!this.botaoGostei) {
+                            avaliar(widget.postagem.id);
                             this.botaoGostei = true;
                           } else {
+                            desavaliar(widget.postagem.id);
                             this.botaoGostei = false;
                           }
                         });
