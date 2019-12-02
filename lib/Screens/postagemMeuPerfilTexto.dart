@@ -146,16 +146,13 @@ class _PostagemMeuPerfilTexto extends State<PostagemMeuPerfilTexto> {
                     alignment: Alignment.centerRight,
                     color: Color.fromRGBO(112, 112, 112, 1),
                     onPressed: () {
-                      //Precisa arrumar
-                      // setState(() {
-                      //   if (!this.botaoGostei) {
-                      //     this.botaoGostei = true;
-                      //     likeCounter++;
-                      //   } else {
-                      //     this.botaoGostei = false;
-                      //     likeCounter--;
-                      //   }
-                      // });
+                      setState(() {
+                          if (!this.botaoGostei) {
+                            this.botaoGostei = true;
+                          } else {
+                            this.botaoGostei = false;
+                          }
+                        });
                     },
                   ),
                   width: MediaQuery.of(context).size.width * 0.15,
@@ -172,32 +169,6 @@ class _PostagemMeuPerfilTexto extends State<PostagemMeuPerfilTexto> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.15,
                 ),
-                // Container(
-                //   child: IconButton(
-                //       icon: Icon(
-                //         Icons.sentiment_dissatisfied,
-                //         size: 30,
-                //         color: this.botaoNGostei
-                //             ? Colors.red
-                //             : Color.fromRGBO(112, 112, 112, 1),
-                //       ),
-                //       alignment: Alignment.centerRight,
-                //       onPressed: () {
-                //         //Precisa arrumar
-                //         setState(() {
-                //           if (!this.botaoNGostei) {
-                //             this.botaoNGostei = true;
-                //             this.botaoGostei = false;
-                //             likeCounter--;
-                //           } else {
-                //             likeCounter++;
-                //             this.botaoNGostei = false;
-                //           }
-                //         });
-                //       },
-                //       color: Color.fromRGBO(112, 112, 112, 1)),
-                //   width: MediaQuery.of(context).size.width * 0.12,
-                // ),
                 Container(
                   child: IconButton(
                       icon: Icon(
