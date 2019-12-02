@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trab_malignous/Screens/testeArquivar.dart';
 import 'novaPostagem.dart';
 
 class Rodape extends StatefulWidget {
@@ -128,10 +127,6 @@ class _Rodape extends State<Rodape> {
               ),
               FlatButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TesteArquivar()),
-                  );
                   setState(() {
                     clicadoHome = false;
                     clicadoMeuPerfil = true;

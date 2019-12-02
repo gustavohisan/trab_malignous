@@ -46,7 +46,7 @@ class _Formulario extends State<Formulario> {
                 //Definimos as cores
                 indicatorColor: Colors.black,
                 //Tem que mudar isso
-                labelColor: Colors.cyan,
+                labelColor: Color.fromRGBO(112, 112, 112, 1),
                 //As tabs em si
                 tabs: [
                   Tab(
@@ -104,43 +104,43 @@ class _Formulario extends State<Formulario> {
                                 //funcionando
                                 var lista = new List();
                                 lista = projectSnap.data
-                                        .map((Topicos elemento) =>
-                                            elemento.titulo.toString())
-                                        .toList();
+                                    .map((Topicos elemento) =>
+                                        elemento.titulo.toString())
+                                    .toList();
                                 return DropdownButtonFormField<dynamic>(
-                                        // Validador do dropdown, se estiver vazio retorna a falha e nao envia
-                                        validator: (dynamic value) {
-                                          if (value?.isEmpty ?? true) {
-                                            return 'Selecione um tópico válido';
-                                          }
-                                          return null;
-                                        },
-                                        //Decoração
-                                        decoration: InputDecoration(
-                                          //Muda a linha de baixo para cinza
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                            color: Colors.grey[300],
-                                          )),
-                                          //Mema coisa só que quando selecionado
-                                          focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                            color: Colors.grey,
-                                          )),
-                                        ),
-                                        //O texto que aparece dentro
-                                        hint: Text(
-                                          "Selecione o tópico",
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.023,
-                                          ),
-                                        ),
-                                        items: projectSnap.hasData ?
-                                            //Os itens da dropdown, será sempre passado o value que seria o ID do topico
-                                            lista.map((items) {
+                                  // Validador do dropdown, se estiver vazio retorna a falha e nao envia
+                                  validator: (dynamic value) {
+                                    if (value?.isEmpty ?? true) {
+                                      return 'Selecione um tópico válido';
+                                    }
+                                    return null;
+                                  },
+                                  //Decoração
+                                  decoration: InputDecoration(
+                                    //Muda a linha de baixo para cinza
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey[300],
+                                    )),
+                                    //Mema coisa só que quando selecionado
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey,
+                                    )),
+                                  ),
+                                  //O texto que aparece dentro
+                                  hint: Text(
+                                    "Selecione o tópico",
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.023,
+                                    ),
+                                  ),
+                                  items: projectSnap.hasData
+                                      ?
+                                      //Os itens da dropdown, será sempre passado o value que seria o ID do topico
+                                      lista.map((items) {
                                           // print(lista.join());
                                           return DropdownMenuItem(
                                             value: items,
@@ -153,17 +153,17 @@ class _Formulario extends State<Formulario> {
                                                             0.023)),
                                           );
                                         }).toList()
-                                        : null,
-                                        //Quando for selecionado algo mudar o valor da variavel para o que foi selecionado
-                                        onChanged: (value) {
-                                          print(value);
-                                          setState(() {
-                                            _valorDropdown = value;
-                                          });
-                                        },
-                                        //Sempre que voce selecionar algo, o valor de dentro muda para o da selecao
-                                        value: _valorDropdown,
-                                      );
+                                      : null,
+                                  //Quando for selecionado algo mudar o valor da variavel para o que foi selecionado
+                                  onChanged: (value) {
+                                    print(value);
+                                    setState(() {
+                                      _valorDropdown = value;
+                                    });
+                                  },
+                                  //Sempre que voce selecionar algo, o valor de dentro muda para o da selecao
+                                  value: _valorDropdown,
+                                );
                               }),
                         ),
                       ),
@@ -252,32 +252,43 @@ class _Formulario extends State<Formulario> {
                           //tira sombra
                           elevation: 0,
                           //cor tem que mudar
-                          color: Colors.cyan,
+                          color: Colors.grey.shade100,
                           //funcao quando clicado
                           onPressed: () {
                             //se for invalidado o estado da chave do formulario, isso quer dizer se os validator retornarem corretamente
                             if (_chaveForm.currentState.validate() &&
                                 _valorTitulo.isNotEmpty &&
                                 _valorDropdown.isNotEmpty) {
-                                  print(_valorTexto.toString());
-                              return postTexto(_valorTitulo, _valorTexto.text, _valorDropdown, infoUsuario.idUsuario);
-                              // showDialog(
-                              //   context: context,
-                              //   builder: (context) {
-                              //     return AlertDialog(
-                              //       // Retrieve the text the that user has entered by using the
-                              //       // TextEditingController.
-                              //       content: Text(_valorTitulo +
-                              //           " " +
-                              //           _valorDropdown +
-                              //           " " +
-                              //           _valorTexto.text +
-                              //           " " +
-                              //           infoUsuario.idUsuario.toString()),
-                              //     );
-                              //   },
-                              // );
+                              postTexto(_valorTitulo, _valorTexto.text,
+                                  _valorDropdown, infoUsuario.idUsuario);
+                              Navigator.of(context).pop();
+                              return showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    // Retrieve the text the that user has entered by using the
+                                    // TextEditingController.
+                                    content: Text("Publicado com sucesso!"),
+                                  );
+                                },
+                              );
                             }
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) {
+                            //     return AlertDialog(
+                            //       // Retrieve the text the that user has entered by using the
+                            //       // TextEditingController.
+                            //       content: Text(_valorTitulo +
+                            //           " " +
+                            //           _valorDropdown +
+                            //           " " +
+                            //           _valorTexto.text +
+                            //           " " +
+                            //           infoUsuario.idUsuario.toString()),
+                            //     );
+                            //   },
+                            // );
                           },
                           //Texto do butao
                           child: Text(
@@ -285,7 +296,7 @@ class _Formulario extends State<Formulario> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.height * 0.023,
-                              color: Colors.white,
+                              color: Color.fromRGBO(112, 112, 112, 1),
                             ),
                           ),
                         ),
