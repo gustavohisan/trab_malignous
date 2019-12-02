@@ -50,6 +50,28 @@ Future<bool> atualizarPostagem(int id, String corpo) async {
   }
 }
 
+Future<bool> aumentarCurtidas(int id) async {
+  final response = await Dio().patch(url.toString() + '/AumentarCurtidas',
+      data: {"id": id});
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> diminuirCurtidas(int id) async {
+  final response = await Dio().patch(url.toString() + '/DiminuirCurtidas',
+      data: {"id": id});
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 void postTexto(String titulo, String corpoDaPublicacao, String tituloTopico,
     int idDoUsuario) async {
   Response response = await Dio().request(
