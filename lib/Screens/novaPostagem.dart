@@ -108,8 +108,7 @@ class _Formulario extends State<Formulario> {
                               child: Container(
                                 //Agora começa mesmo o form, com o dropdownbutton
                                 width: MediaQuery.of(context).size.width * 0.95,
-                                child:
-                                    DropdownButtonFormField<dynamic>(
+                                child: DropdownButtonFormField<dynamic>(
                                   // Validador do dropdown, se estiver vazio retorna a falha e nao envia
                                   validator: (dynamic value) {
                                     if (value?.isEmpty ?? true) {
@@ -263,12 +262,21 @@ class _Formulario extends State<Formulario> {
                                   if (_chaveForm.currentState.validate() &&
                                       _valorTitulo.isNotEmpty &&
                                       _valorDropdown.isNotEmpty) {
-                                    print(_valorTexto.toString());
-                                    return postTexto(
-                                        _valorTitulo,
-                                        _valorTexto.text,
-                                        _valorDropdown,
-                                        infoUsuario.idUsuario);
+                                    postTexto(_valorTitulo, _valorTexto.text,
+                                        _valorDropdown, infoUsuario.idUsuario);
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    return showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          // Retrieve the text the that user has entered by using the
+                                          // TextEditingController.
+                                          content:
+                                              Text("Publicado com sucesso!"),
+                                        );
+                                      },
+                                    );
                                   }
                                 },
                                 //Texto do butao

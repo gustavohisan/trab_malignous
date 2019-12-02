@@ -3,7 +3,7 @@ import 'package:trab_malignous/Model/Postagem.dart';
 import 'package:trab_malignous/Model/Topicos.dart';
 import 'package:trab_malignous/Screens/informacaoUsuario.dart';
 
-Uri url = Uri.parse('http://192.168.0.14:3000');
+Uri url = Uri.parse('http://192.168.0.16:3000');
 
 Future<List<Postagem>> getPostagens() async {
   Response response = await Dio().request(url.toString() + '/Publicacoes',

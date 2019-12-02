@@ -28,6 +28,12 @@ dependencies:
   dio: ^3.0.6 
   intl:
   transparent_image: ^0.1.0
+  flutter_launcher_icons: ^0.7.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "icon.png"
 
 dev_dependencies:
   flutter_test:
