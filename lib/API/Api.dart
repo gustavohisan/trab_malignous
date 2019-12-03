@@ -3,7 +3,7 @@ import 'package:trab_malignous/Model/Postagem.dart';
 import 'package:trab_malignous/Model/Topicos.dart';
 import 'package:trab_malignous/Screens/informacaoUsuario.dart';
 
-Uri url = Uri.parse('http://192.168.0.16:3000');
+Uri url = Uri.parse('http://192.168.0.145:3000');
 
 Future<List<Postagem>> getPostagens() async {
   Response response = await Dio().request(url.toString() + '/Publicacoes',
@@ -111,7 +111,6 @@ Future<Postagem> getPostagemID(int id) async {
       url.toString() + '/PublicacaoPorId/' + id.toString(),
       options: Options(headers: {"Accept": "application/json"}, method: 'GET'));
   Postagem postagem = Postagem.fromJson(response.data[0]);
-  print(postagem.toJson());
   return postagem;
 }
 

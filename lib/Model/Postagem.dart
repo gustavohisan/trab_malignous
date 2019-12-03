@@ -40,18 +40,6 @@ class Postagem {
     idTopico = json['id_topico'];
     fotoTopico = json['foto'];
   }
-  // factory Postagem.fromJson(Map<String, dynamic> json) => new Postagem(
-  // id : json['id'],
-  // data : json['data'],
-  // titulo : json['titulo'],
-  // corpo : json['corpo'],
-  // situacao : json['situacao'],
-  // quantAvaliacoes : json['quant_avaliacoes'],
-  // tipo : json['tipo'],
-  // idUsuario : json['id_usuario'],
-  // idTopico : json['id_topico'],
-  // );
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['IDPublicacao'] = this.id;
