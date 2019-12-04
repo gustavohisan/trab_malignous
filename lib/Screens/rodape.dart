@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trab_malignous/Screens/TestScreen.dart';
 import 'novaPostagem.dart';
 
 class Rodape extends StatefulWidget {
@@ -127,10 +128,15 @@ class _Rodape extends State<Rodape> {
               ),
               FlatButton(
                 onPressed: () {
-                  setState(() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TestScreen()),
+                  );
+                    setState(() {
                     clicadoHome = false;
                     clicadoMeuPerfil = true;
                     clicadoSeguindo = false;
+                    
                   });
                 },
                 child: (Column(
