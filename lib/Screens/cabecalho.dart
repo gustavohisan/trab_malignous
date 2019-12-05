@@ -7,8 +7,10 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     //Variaveis para guardar coisas inuteis na real que eu nem uso direito porém é mais recomendado usar
     double width = MediaQuery.of(context).size.width;
-    double widthCaixaTexto = width * 0.75;
+    double height = MediaQuery.of(context).size.height;
+    double widthCaixaTexto = width * 0.5;
     double widthIcone = width * 0.1;
+    double heightIcone = height * 0.8;
     //Retorna o cabeçalho
     return Container(
         height: MediaQuery.of(context).size.height * 0.115, //Tamanho do cabeçalho
@@ -18,19 +20,25 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
             //Alinhar em colunas
             children: <Widget>[
               //Conteudo das colunas
-              //Icone Perfil
+              //Logo
               Container(
-                //Posição
-                transform: Matrix4.translationValues(-8, 0, 0),
-                //Icone do perfil, clicavel nao faz nada
+                //width:
+                height:
                 child: IconButton(
-                  icon: Icon(Icons.account_circle),
-                  iconSize: widthIcone,
-                  color: Color.fromRGBO(112, 112, 112, 1),
-                  //Aqui ficaria o perfil se tivesse n tem
+                  icon: Icon(Image.asset('assets/icon.png')),
+                  iconSize: (widthIcone < heightIcone) ? widthIcone : heigthIcone,
                   onPressed: () {
-                    return null;
-                  },
+                    return MyApp();
+                ),       
+              ),
+              // Criar postagem
+              Container(
+                child: IconButton(
+                    icon: Icon(Icon.create),
+                    iconSize: (widthIcone < heightIcone) ? widthIcone : heigthIcone,
+                    onPressed: () {
+                      return Formulario();
+                    }
                 ),
               ),
               //Barra de pesquisa
@@ -66,6 +74,21 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                         color: Color.fromRGBO(112, 112, 112, 1),
                     )
                   ),
+                ),
+              ),
+              //Icone Perfil
+              Container(
+                //Posição
+                transform: Matrix4.translationValues(-8, 0, 0),
+                //Icone do perfil, clicavel nao faz nada
+                child: IconButton(
+                  icon: Icon(Icons.account_circle),
+                  iconSize: (widthIcone < heightIcone) ? widthIcone : heigthIcone,
+                  color: Color.fromRGBO(112, 112, 112, 1),
+                  //Aqui ficaria o perfil se tivesse n tem
+                  onPressed: () {
+                    return MeuPerfil();
+                  },
                 ),
               ),
             ],

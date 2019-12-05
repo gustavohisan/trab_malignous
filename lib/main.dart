@@ -46,43 +46,31 @@ class _MyApp extends State<MyApp> {
           body: Container(
             margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
             //List view para mostrar todas as publicações
-            child: PageView(
-              children: <Widget>[
-                RefreshIndicator(
-                  key: _recarregarInicioChave,
-                  onRefresh: _recarregar,
-                  child: FutureBuilder(
-                      future: getPostagens(),
-                      builder: (context, projectSnap) {
-                        return projectSnap.hasData
-                            ? ListView.builder(
-                                itemCount: projectSnap.data.length,
-                                padding: EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.25),
-                                //Scroll vertical
-                                scrollDirection: Axis.vertical,
-                                //Começa a criação
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (projectSnap.data[index].tipo.compareTo('texto') == 0) {
-                                    return Container(
-                                            child: PostagemTexto(
-                                              postagem: projectSnap.data[index]),
-                                          );
-                                  } else {
-                                    return Container(
-                                            child: PostagemImagem(
-                                              postagem: projectSnap.data[index]),
-                                          );
-                                  }
-                                })
-                            : Center(child: CircularProgressIndicator());
-                      }),
-                ),
-                RefreshIndicator(
-                  key: _recarregarMeuPerfilChave,
-                  onRefresh: _recarregar,
-                  child: MeuPerfil(),
-                )
-              ],
+            child: FutureBuilder(
+              future: getPostagens(),
+              builder: (context, projectSnap) {
+                return projectSnap.hasData
+                    ? ListView.builder(
+                        itemCount: projectSnap.data.length,
+                        padding: EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.25),
+                        //Scroll vertical
+                        scrollDirection: Axis.vertical,
+                        //Começa a criação
+                        itemBuilder: (BuildContext context, int index) {
+                          if (projectSnap.data[index].tipo.compareTo('texto') == 0) {
+                            return Container(
+                                    child: PostagemTexto(
+                                      postagem: projectSnap.data[index]),
+                                  );
+                          } else {
+                            return Container(
+                                    child: PostagemImagem(
+                                      postagem: projectSnap.data[index]),
+                                  );
+                          }
+                        })
+                    : Center(child: CircularProgressIndicator());
+              }),
             ),
           ),
           //Cor de fundo do programa
