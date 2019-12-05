@@ -32,7 +32,7 @@ class _MyApp extends State<MyApp> {
   Widget build(BuildContext context) {
     //Isso aqui é a cor do cabeçalho e rodapé do android, não esquece de mudar no fim
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Color.fromRGBO(112, 112, 112, 1), // Barra de baixo
+      //systemNavigationBarColor: Color.fromRGBO(112, 112, 112, 1), // Barra de baixo
       statusBarColor: Color.fromRGBO(112, 112, 112, 1), // Barra de cima
     ));
     return MaterialApp(
@@ -45,7 +45,7 @@ class _MyApp extends State<MyApp> {
           //Corpo
           body: Container(
             margin: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
-            //List view para mostrar todos os topicos
+            //List view para mostrar todas as publicações
             child: PageView(
               children: <Widget>[
                 RefreshIndicator(
@@ -57,22 +57,21 @@ class _MyApp extends State<MyApp> {
                         return projectSnap.hasData
                             ? ListView.builder(
                                 itemCount: projectSnap.data.length,
+                                padding: EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.25),
                                 //Scroll vertical
                                 scrollDirection: Axis.vertical,
                                 //Começa a criação
-                                itemBuilder: (BuildContext ctxt, int index) {
-                                  if (projectSnap.data[index].tipo
-                                          .compareTo('texto') ==
-                                      0) {
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (projectSnap.data[index].tipo.compareTo('texto') == 0) {
                                     return Container(
-                                      child: PostagemTexto(
-                                          postagem: projectSnap.data[index]),
-                                    );
+                                            child: PostagemTexto(
+                                              postagem: projectSnap.data[index]),
+                                          );
                                   } else {
                                     return Container(
-                                      child: PostagemImagem(
-                                          postagem: projectSnap.data[index]),
-                                    );
+                                            child: PostagemImagem(
+                                              postagem: projectSnap.data[index]),
+                                          );
                                   }
                                 })
                             : Center(child: CircularProgressIndicator());
@@ -86,8 +85,6 @@ class _MyApp extends State<MyApp> {
               ],
             ),
           ),
-          //Criação do rodape
-          bottomNavigationBar: Rodape(),
           //Cor de fundo do programa
           backgroundColor: Color.fromRGBO(255, 255, 255, 0.98)),
     );
