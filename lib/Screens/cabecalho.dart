@@ -10,13 +10,13 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     //Variaveis para guardar coisas inuteis na real que eu nem uso direito porém é mais recomendado usar
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height * 0.115; //Tamanho do cabeçalho
     double widthCaixaTexto = width * 0.5;
     double widthIcone = width * 0.1;
-    double heightIcone = height * 0.8;
+    double heightIcone = height * 0.5;
     //Retorna o cabeçalho
     return Container(
-        height: MediaQuery.of(context).size.height * 0.115, //Tamanho do cabeçalho
+        height: height,
         child: AppBar(
           //Criação da appBar
           title: Row(
@@ -30,6 +30,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                 child: IconButton(
                   icon: Image.asset('icon.png'),
                   iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
+                  color: Color.fromRGBO(112, 112, 112, 1),
                   onPressed: () {
                     return MyApp();
                   }
@@ -40,6 +41,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                 child: IconButton(
                     icon: Icon(Icons.create),
                     iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
+                    color: Color.fromRGBO(112, 112, 112, 1),
                     onPressed: () {
                       return Formulario();
                     }
