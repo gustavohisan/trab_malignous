@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trab_malignous/main.dart';
+import 'package:trab_malignous/Screens/novaPostagem.dart';
+import 'package:trab_malignous/Screens/meuPerfil.dart';
 
 //Stateless ja que nao tem mudança, prefferedsizewidget porque é obrigatório
 class Cabecalho extends StatelessWidget with PreferredSizeWidget {
@@ -23,19 +26,20 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
               //Logo
               Container(
                 //width:
-                height:
+                //height:
                 child: IconButton(
-                  icon: Icon(Image.asset('assets/icon.png')),
-                  iconSize: (widthIcone < heightIcone) ? widthIcone : heigthIcone,
+                  icon: Image.asset('icon.png'),
+                  iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
                   onPressed: () {
                     return MyApp();
-                ),       
+                  }
+                ),
               ),
               // Criar postagem
               Container(
                 child: IconButton(
-                    icon: Icon(Icon.create),
-                    iconSize: (widthIcone < heightIcone) ? widthIcone : heigthIcone,
+                    icon: Icon(Icons.create),
+                    iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
                     onPressed: () {
                       return Formulario();
                     }
@@ -83,7 +87,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                 //Icone do perfil, clicavel nao faz nada
                 child: IconButton(
                   icon: Icon(Icons.account_circle),
-                  iconSize: (widthIcone < heightIcone) ? widthIcone : heigthIcone,
+                  iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
                   color: Color.fromRGBO(112, 112, 112, 1),
                   //Aqui ficaria o perfil se tivesse n tem
                   onPressed: () {

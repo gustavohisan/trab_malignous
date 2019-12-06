@@ -25,7 +25,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
