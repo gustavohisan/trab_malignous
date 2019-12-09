@@ -29,6 +29,7 @@ class _MyApp extends State<MyApp> {
     super.dispose();
   }
 
+  ScrollController _rrectController = ScrollController();
   @override
   Widget build(BuildContext context) {
     //Isso aqui é a cor do cabeçalho e rodapé do android, não esquece de mudar no fim
@@ -51,11 +52,9 @@ class _MyApp extends State<MyApp> {
               future: getPostagens(),
               builder: (context, projectSnap) {
                 return projectSnap.hasData
-                  ? DraggableScrollbar.rrect(
-                    controller: ScrollController(
-                      initialScrollOffset: 1.0,
-                      keepScrollOffset: true,
-                    ),
+                  ? //DraggableScrollbar.rrect(
+                    //controller: _rrectController,
+                    Scrollbar(
                     child: ListView.builder(
                       itemCount: projectSnap.data.length,
                       padding: EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.25),
