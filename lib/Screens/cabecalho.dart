@@ -20,6 +20,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
         child: AppBar(
           //Criação da appBar
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             //Alinhar em colunas
             children: <Widget>[
               //Conteudo das colunas

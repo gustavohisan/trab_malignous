@@ -56,8 +56,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                           style: TextStyle(
                               fontFamily: 'Roboto',
                               color: Color.fromRGBO(112, 112, 112, 1),
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04),
+                              fontSize: 20),
                         ),
                       ),
                       Container(
@@ -73,8 +72,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                                 fontWeight: FontWeight.w300,
                                 fontFamily: 'Roboto',
                                 color: Color.fromRGBO(112, 112, 112, 1),
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.035),
+                                fontSize: 12),
                           )),
                     ],
                   ),
@@ -113,7 +111,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                           fontFamily: 'Roboto',
                           color: Color.fromRGBO(112, 112, 112, 1),
                           fontWeight: FontWeight.w500,
-                          fontSize: MediaQuery.of(context).size.width * 0.06),
+                          fontSize: 32),
                     ),
                   ),
                   Container(
@@ -127,7 +125,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                       style: TextStyle(
                           fontFamily: 'Roboto',
                           color: Color.fromRGBO(112, 112, 112, 0.8),
-                          fontSize: MediaQuery.of(context).size.width * 0.04),
+                          fontSize: 14),
                     ),
                   ),
                 ],
@@ -169,7 +167,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: MediaQuery.of(context).size.width * 0.045,
+                        fontSize: 14,
                         fontWeight: FontWeight.w500),
                   ),
                   width: MediaQuery.of(context).size.width * 0.15,
@@ -192,7 +190,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: MediaQuery.of(context).size.width * 0.045,
+                        fontSize: 14,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
