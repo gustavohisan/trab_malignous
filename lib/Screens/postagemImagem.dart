@@ -152,7 +152,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                         child: IconButton(
                           icon: Icon(
                             Icons.thumb_up,
-                            size: MediaQuery.of(context).size.height * 0.03,
+                            size: 24,
                             color: this.botaoGostei
                                 ? Colors.blue
                                 : Color.fromRGBO(112, 112, 112, 1),
@@ -173,7 +173,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                             });
                           },
                         ),
-                        width: MediaQuery.of(context).size.width * 0.06,
+                        width: 48,
                       ),
                       Container(
                         child: Text(
@@ -182,7 +182,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                           style: TextStyle(                        
                               fontFamily: 'Roboto',
                               color: Color.fromRGBO(112, 112, 112, 1),
-                              fontSize: 14,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500),
                         ),
                         width: MediaQuery.of(context).size.width * 0.06,
@@ -196,12 +196,12 @@ class _PostagemImagem extends State<PostagemImagem> {
                         child: IconButton(
                             icon: Icon(
                               Icons.comment,
-                              size: MediaQuery.of(context).size.width * 0.02,
+                              size: 24,
                             ),
                             alignment: Alignment.center,
                             onPressed: () {},
                             color: Color.fromRGBO(112, 112, 112, 1)),
-                        width: MediaQuery.of(context).size.width * 0.06,
+                        width: 48,
                       ),
                       Container(
                         child: Text(
@@ -210,7 +210,7 @@ class _PostagemImagem extends State<PostagemImagem> {
                           style: TextStyle(
                               fontFamily: 'Roboto',
                               color: Color.fromRGBO(112, 112, 112, 1),
-                              fontSize: 14,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500),
                         ),
                       ),

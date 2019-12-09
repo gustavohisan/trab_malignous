@@ -45,11 +45,11 @@ class _PostagemTexto extends State<PostagemTexto> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.70,
+                  width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(
                     children: <Widget>[
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.75,
+                        width: MediaQuery.of(context).size.width * 0.3,
                         child: Text(
                           this.widget.postagem.tituloTopico,
                           textAlign: TextAlign.left,
@@ -60,7 +60,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                         ),
                       ),
                       Container(
-                          width: MediaQuery.of(context).size.width * 0.75,
+                          width: MediaQuery.of(context).size.width * 0.3,
                           child: Text(
                             "publicado por " +
                                 this
@@ -77,7 +77,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                     ],
                   ),
                 ),
-                Container(
+                /*Container(
                   width: MediaQuery.of(context).size.width * 0.10,
                   child: IconButton(
                     icon: Icon(Icons.more_horiz,
@@ -85,7 +85,7 @@ class _PostagemTexto extends State<PostagemTexto> {
                         color: Color.fromRGBO(112, 112, 112, 1)),
                     onPressed: () => {},
                   ),
-                ),
+                ),*/
               ],
             ),
             GestureDetector(
@@ -125,75 +125,86 @@ class _PostagemTexto extends State<PostagemTexto> {
                       style: TextStyle(
                           fontFamily: 'Roboto',
                           color: Color.fromRGBO(112, 112, 112, 0.8),
-                          fontSize: 14),
+                          fontSize: 24),
                     ),
                   ),
                 ],
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.thumb_up,
-                      size: MediaQuery.of(context).size.height * 0.04,
-                      color: this.botaoGostei
-                          ? Colors.blue
-                          : Color.fromRGBO(112, 112, 112, 1),
-                    ),
-                    alignment: Alignment.centerRight,
-                    color: Color.fromRGBO(112, 112, 112, 1),
-                    onPressed: () {
-                      setState(() {
-                        if (!this.botaoGostei) {
-                            avaliar(widget.postagem.id);
-                            aumentarCurtidas(widget.postagem.id);
-                            this.botaoGostei = true;
-                          } else {
-                            desavaliar(widget.postagem.id);
-                            diminuirCurtidas(widget.postagem.id);
-                            this.botaoGostei = false;
-                          }
-                      });
-                    },
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.15,
-                ),
-                Container(
-                  child: Text(
-                    widget.postagem.quantAvaliacoes.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.15,
-                ),
-                Container(
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.comment,
-                        size: MediaQuery.of(context).size.width * 0.09,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget> [
+                      Container(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.thumb_up,
+                            size: 24,
+                            color: this.botaoGostei
+                                ? Colors.blue
+                                : Color.fromRGBO(112, 112, 112, 1),
+                          ),
+                          alignment: Alignment.center,
+                          color: Color.fromRGBO(112, 112, 112, 1),
+                          onPressed: () {
+                            setState(() {
+                              if (!this.botaoGostei) {
+                                  avaliar(widget.postagem.id);
+                                  aumentarCurtidas(widget.postagem.id);
+                                  this.botaoGostei = true;
+                                } else {
+                                  desavaliar(widget.postagem.id);
+                                  diminuirCurtidas(widget.postagem.id);
+                                  this.botaoGostei = false;
+                                }
+                            });
+                          },
+                        ),
+                        width: 48,
                       ),
-                      alignment: Alignment.centerRight,
-                      onPressed: () {},
-                      color: Color.fromRGBO(112, 112, 112, 1)),
-                  width: MediaQuery.of(context).size.width * 0.50,
-                ),
-                Container(
-                  child: Text(
-                    "1000",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
+                      Container(
+                        child: Text(
+                          widget.postagem.quantAvaliacoes.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Roboto',
+                              color: Color.fromRGBO(112, 112, 112, 1),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.06,
+                      ),
+                    ],
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget> [
+                      Container(
+                        child: IconButton(
+                            icon: Icon(
+                              Icons.comment,
+                              size: 24,
+                            ),
+                            alignment: Alignment.center,
+                            onPressed: () {},
+                            color: Color.fromRGBO(112, 112, 112, 1)),
+                        width: 48,
+                      ),
+                      Container(
+                        child: Text(
+                          "1000",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontFamily: 'Roboto',
+                              color: Color.fromRGBO(112, 112, 112, 1),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ],
