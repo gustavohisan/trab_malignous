@@ -1,4 +1,4 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:flutter_driver/src/common/error.dart';
 import 'package:flutter_driver/src/common/health.dart';
+import 'package:flutter_driver/src/common/wait.dart';
 import 'package:flutter_driver/src/driver/driver.dart';
 import 'package:flutter_driver/src/driver/timeline.dart';
 import 'package:json_rpc_2/json_rpc_2.dart' as rpc;
@@ -20,21 +21,23 @@ const Duration _kTestTimeout = Duration(milliseconds: 1234);
 const String _kSerializedTestTimeout = '1234';
 
 void main() {
+  final List<String> log = <String>[];
+  driverLog = (String source, String message) {
+    log.add('$source: $message');
+  };
+
   group('FlutterDriver.connect', () {
-    List<LogRecord> log;
-    StreamSubscription<LogRecord> logSub;
     MockVMServiceClient mockClient;
     MockVM mockVM;
     MockIsolate mockIsolate;
     MockPeer mockPeer;
 
     void expectLogContains(String message) {
-      expect(log.map<String>((LogRecord r) => '$r'), anyElement(contains(message)));
+      expect(log, anyElement(contains(message)));
     }
 
     setUp(() {
-      log = <LogRecord>[];
-      logSub = flutterDriverLog.listen(log.add);
+      log.clear();
       mockClient = MockVMServiceClient();
       mockVM = MockVM();
       mockIsolate = MockIsolate();
@@ -52,7 +55,6 @@ void main() {
     });
 
     tearDown(() async {
-      await logSub.cancel();
       restoreVmServiceConnectFunction();
     });
 
@@ -248,16 +250,71 @@ void main() {
       });
     });
 
+    group('waitForCondition', () {
+      test('sends the wait for NoPendingFrameCondition command', () async {
+        when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
+          expect(i.positionalArguments[1], <String, dynamic>{
+            'command': 'waitForCondition',
+            'timeout': _kSerializedTestTimeout,
+            'conditionName': 'NoPendingFrameCondition',
+          });
+          return makeMockResponse(<String, dynamic>{});
+        });
+        await driver.waitForCondition(const NoPendingFrame(), timeout: _kTestTimeout);
+      });
+
+      test('sends the wait for NoPendingPlatformMessages command', () async {
+        when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
+          expect(i.positionalArguments[1], <String, dynamic>{
+            'command': 'waitForCondition',
+            'timeout': _kSerializedTestTimeout,
+            'conditionName': 'NoPendingPlatformMessagesCondition',
+          });
+          return makeMockResponse(<String, dynamic>{});
+        });
+        await driver.waitForCondition(const NoPendingPlatformMessages(), timeout: _kTestTimeout);
+      });
+
+      test('sends the waitForCondition of combined conditions command', () async {
+        when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
+          expect(i.positionalArguments[1], <String, dynamic>{
+            'command': 'waitForCondition',
+            'timeout': _kSerializedTestTimeout,
+            'conditionName': 'CombinedCondition',
+            'conditions': '[{"conditionName":"NoPendingFrameCondition"},{"conditionName":"NoTransientCallbacksCondition"}]',
+          });
+          return makeMockResponse(<String, dynamic>{});
+        });
+        const SerializableWaitCondition combinedCondition =
+            CombinedCondition(<SerializableWaitCondition>[NoPendingFrame(), NoTransientCallbacks()]);
+        await driver.waitForCondition(combinedCondition, timeout: _kTestTimeout);
+      });
+    });
+
     group('waitUntilNoTransientCallbacks', () {
       test('sends the waitUntilNoTransientCallbacks command', () async {
         when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
           expect(i.positionalArguments[1], <String, dynamic>{
-            'command': 'waitUntilNoTransientCallbacks',
+            'command': 'waitForCondition',
             'timeout': _kSerializedTestTimeout,
+            'conditionName': 'NoTransientCallbacksCondition',
           });
           return makeMockResponse(<String, dynamic>{});
         });
         await driver.waitUntilNoTransientCallbacks(timeout: _kTestTimeout);
+      });
+    });
+
+    group('waitUntilFirstFrameRasterized', () {
+      test('sends the waitUntilFirstFrameRasterized command', () async {
+        when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
+          expect(i.positionalArguments[1], <String, dynamic>{
+            'command': 'waitForCondition',
+            'conditionName': 'FirstFrameRasterizedCondition',
+          });
+          return makeMockResponse(<String, dynamic>{});
+        });
+        await driver.waitUntilFirstFrameRasterized();
       });
     });
 
@@ -492,8 +549,7 @@ void main() {
 
     group('sendCommand error conditions', () {
       test('local default timeout', () async {
-        final List<String> log = <String>[];
-        final StreamSubscription<LogRecord> logSub = flutterDriverLog.listen((LogRecord s) => log.add(s.toString()));
+        log.clear();
         when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
           // completer never completed to trigger timeout
           return Completer<Map<String, dynamic>>().future;
@@ -503,13 +559,11 @@ void main() {
           expect(log, <String>[]);
           time.elapse(kUnusuallyLongTimeout);
         });
-        expect(log, <String>['[warning] FlutterDriver: waitFor message is taking a long time to complete...']);
-        await logSub.cancel();
+        expect(log, <String>['FlutterDriver: waitFor message is taking a long time to complete...']);
       });
 
       test('local custom timeout', () async {
-        final List<String> log = <String>[];
-        final StreamSubscription<LogRecord> logSub = flutterDriverLog.listen((LogRecord s) => log.add(s.toString()));
+        log.clear();
         when(mockIsolate.invokeExtension(any, any)).thenAnswer((Invocation i) {
           // completer never completed to trigger timeout
           return Completer<Map<String, dynamic>>().future;
@@ -520,8 +574,7 @@ void main() {
           expect(log, <String>[]);
           time.elapse(customTimeout);
         });
-        expect(log, <String>['[warning] FlutterDriver: waitFor message is taking a long time to complete...']);
-        await logSub.cancel();
+        expect(log, <String>['FlutterDriver: waitFor message is taking a long time to complete...']);
       });
 
       test('remote error', () async {

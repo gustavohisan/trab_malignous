@@ -1,4 +1,4 @@
-// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -213,19 +213,14 @@ class StackParentData extends ContainerBoxParentData<RenderBox> {
 
   @override
   String toString() {
-    final List<String> values = <String>[];
-    if (top != null)
-      values.add('top=${debugFormatDouble(top)}');
-    if (right != null)
-      values.add('right=${debugFormatDouble(right)}');
-    if (bottom != null)
-      values.add('bottom=${debugFormatDouble(bottom)}');
-    if (left != null)
-      values.add('left=${debugFormatDouble(left)}');
-    if (width != null)
-      values.add('width=${debugFormatDouble(width)}');
-    if (height != null)
-      values.add('height=${debugFormatDouble(height)}');
+    final List<String> values = <String>[
+      if (top != null) 'top=${debugFormatDouble(top)}',
+      if (right != null) 'right=${debugFormatDouble(right)}',
+      if (bottom != null) 'bottom=${debugFormatDouble(bottom)}',
+      if (left != null) 'left=${debugFormatDouble(left)}',
+      if (width != null) 'width=${debugFormatDouble(width)}',
+      if (height != null) 'height=${debugFormatDouble(height)}',
+    ];
     if (values.isEmpty)
       values.add('not positioned');
     values.add(super.toString());

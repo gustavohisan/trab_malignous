@@ -1,4 +1,4 @@
-// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -895,7 +895,10 @@ class RenderTable extends RenderBox {
     }
 
     // beyond this point, unflexedTableWidth is no longer valid
-    assert(() { unflexedTableWidth = null; return true; }());
+    assert(() {
+      unflexedTableWidth = null;
+      return true;
+    }());
 
     // 4. apply the maximum width of the table, shrinking columns as
     //    necessary, applying minimum column widths as we go

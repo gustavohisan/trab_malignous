@@ -54,8 +54,7 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                                             widget.postagem.fotoTopico)))),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.02),
+                                  left: MediaQuery.of(context).size.width * 0.02),
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -75,13 +74,11 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                                     child: Text(
                                       "por " +
                                           widget.postagem.nomeUsuario +
-                                          " as " +
+                                          " em " +
                                           dataConvertida,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                                0.02,
+                                        fontSize: MediaQuery.of(context).size.height * 0.02,
                                         fontWeight: FontWeight.w300,
                                         color: Color.fromRGBO(112, 112, 112, 1),
                                       ),
@@ -98,7 +95,7 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
               //Titulo da publicacao
               Padding(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.04),
+                    top: MediaQuery.of(context).size.height * 0.02),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.90,
                   child: Text(
@@ -107,22 +104,25 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                     style: TextStyle(
                       color: Color.fromRGBO(112, 112, 112, 1),
                       fontWeight: FontWeight.w500,
-                      fontSize: MediaQuery.of(context).size.height * 0.03,
+                      fontSize: 32,
                     ),
                   ),
                 ),
               ),
-              Padding( padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
-              child:  Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Text(widget.postagem.corpo,
-                style: TextStyle(
-                  color: Color.fromRGBO(112, 112, 112, 0.8),
-                  fontWeight: FontWeight.w400,
-                  fontSize: MediaQuery.of(context).size.height * 0.025,
-                  letterSpacing: MediaQuery.of(context).size.width * 0.0015,
-                ),),
-              ),),
+              Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+                child:  Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Text(
+                    widget.postagem.corpo,
+                    style: TextStyle(
+                      color: Color.fromRGBO(112, 112, 112, 0.8),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
               //Informacoes da publicacao
               
               Container(
@@ -134,33 +134,32 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                     IconButton(
                       icon: Icon(Icons.thumb_up),
                       color: Color.fromRGBO(112, 112, 112, 1),
-                      iconSize: MediaQuery.of(context).size.height * 0.033,
+                      iconSize: 24,
                       onPressed: () {},
                     ),
                     Text(
                       widget.postagem.quantAvaliacoes.toString(),
                       style: TextStyle(
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: MediaQuery.of(context).size.height * 0.027,
+                        fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.55,
-                      child: IconButton(
-                          icon: Icon(
-                            Icons.comment,
-                            size: MediaQuery.of(context).size.width * 0.06,
-                          ),
-                          alignment: Alignment.centerRight,
-                          onPressed: () {},
-                          color: Color.fromRGBO(112, 112, 112, 1)),
+                    IconButton(
+                      icon: Icon(
+                        Icons.comment,
+                        size: 24,
+                      ),
+                      alignment: Alignment.center,
+                      onPressed: () {},
+                      color: Color.fromRGBO(112, 112, 112, 1),
                     ),
                     Text(
                       "1000",
+                      textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Color.fromRGBO(112, 112, 112, 1),
-                        fontSize: MediaQuery.of(context).size.height * 0.027,
+                        fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -197,7 +196,7 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).size.width * 0.25),
                         child: Align(
-                          alignment: Alignment.bottomRight,
+                          alignment: Alignment.centerRight,
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               value: _selecionadoOrdem,
@@ -210,8 +209,7 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                               hint: Text(
                                 "Ordenar por",
                                 style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.height * 0.02,
+                                  fontSize: MediaQuery.of(context).size.height * 0.02,
                                   color: Color.fromRGBO(112, 112, 112, 1),
                                 ),
                               ),
@@ -281,7 +279,7 @@ class _PostagemCompletaTexto extends State<PostagemCompletaTexto> {
                         ),
                         Icon(
                           Icons.sentiment_dissatisfied,
-                          size: MediaQuery.of(context).size.width * 0.1,
+                          size: 32,
                           color: Color.fromRGBO(112, 112, 112, 1),
                         )
                       ],

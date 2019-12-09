@@ -1,4 +1,4 @@
-// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -60,6 +60,7 @@ class BottomSheet extends StatefulWidget {
     this.backgroundColor,
     this.elevation,
     this.shape,
+    this.clipBehavior,
     @required this.onClosing,
     @required this.builder,
   }) : assert(enableDrag != null),
@@ -89,7 +90,7 @@ class BottomSheet extends StatefulWidget {
   final WidgetBuilder builder;
 
   /// If true, the bottom sheet can be dragged up and down and dismissed by
-  /// swiping downards.
+  /// swiping downwards.
   ///
   /// Default is true.
   final bool enableDrag;
@@ -114,6 +115,19 @@ class BottomSheet extends StatefulWidget {
   ///
   /// Defaults to null and falls back to [Material]'s default.
   final ShapeBorder shape;
+
+  /// {@macro flutter.widgets.Clip}
+  ///
+  /// Defines the bottom sheet's [Material.clipBehavior].
+  ///
+  /// Use this property to enable clipping of content when the bottom sheet has
+  /// a custom [shape] and the content can extend past this shape. For example,
+  /// a bottom sheet with rounded corners and an edge-to-edge [Image] at the
+  /// top.
+  ///
+  /// If this property is null then [ThemeData.bottomSheetTheme.clipBehavior] is
+  /// used. If that's null then the behavior will be [Clip.none].
+  final Clip clipBehavior;
 
   @override
   _BottomSheetState createState() => _BottomSheetState();
@@ -185,12 +199,14 @@ class _BottomSheetState extends State<BottomSheet> {
     final Color color = widget.backgroundColor ?? bottomSheetTheme.backgroundColor;
     final double elevation = widget.elevation ?? bottomSheetTheme.elevation ?? 0;
     final ShapeBorder shape = widget.shape ?? bottomSheetTheme.shape;
+    final Clip clipBehavior = widget.clipBehavior ?? bottomSheetTheme.clipBehavior ?? Clip.none;
 
     final Widget bottomSheet = Material(
       key: _childKey,
       color: color,
       elevation: elevation,
       shape: shape,
+      clipBehavior: clipBehavior,
       child: NotificationListener<DraggableScrollableNotification>(
         onNotification: extentChanged,
         child: widget.builder(context),
@@ -247,6 +263,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.backgroundColor,
     this.elevation,
     this.shape,
+    this.clipBehavior,
     this.isScrollControlled = false,
   }) : assert(isScrollControlled != null),
        super(key: key);
@@ -256,6 +273,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final Color backgroundColor;
   final double elevation;
   final ShapeBorder shape;
+  final Clip clipBehavior;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -263,8 +281,9 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   String _getRouteLabel(MaterialLocalizations localizations) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
         return '';
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -306,6 +325,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 backgroundColor: widget.backgroundColor,
                 elevation: widget.elevation,
                 shape: widget.shape,
+                clipBehavior: widget.clipBehavior,
               ),
             ),
           ),
@@ -323,9 +343,12 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.backgroundColor,
     this.elevation,
     this.shape,
+    this.clipBehavior,
+    this.isDismissible = true,
     @required this.isScrollControlled,
     RouteSettings settings,
   }) : assert(isScrollControlled != null),
+       assert(isDismissible != null),
        super(settings: settings);
 
   final WidgetBuilder builder;
@@ -334,12 +357,14 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color backgroundColor;
   final double elevation;
   final ShapeBorder shape;
+  final Clip clipBehavior;
+  final bool isDismissible;
 
   @override
   Duration get transitionDuration => _bottomSheetDuration;
 
   @override
-  bool get barrierDismissible => true;
+  bool get barrierDismissible => isDismissible;
 
   @override
   final String barrierLabel;
@@ -359,6 +384,7 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    final BottomSheetThemeData sheetTheme = theme?.bottomSheetTheme ?? Theme.of(context).bottomSheetTheme;
     // By definition, the bottom sheet is aligned to the bottom of the page
     // and isn't exposed to the top padding of the MediaQuery.
     Widget bottomSheet = MediaQuery.removePadding(
@@ -366,10 +392,11 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
       removeTop: true,
       child: _ModalBottomSheet<T>(
         route: this,
-        backgroundColor: backgroundColor,
-        elevation: elevation,
+        backgroundColor: backgroundColor ?? sheetTheme?.modalBackgroundColor ?? sheetTheme?.backgroundColor,
+        elevation: elevation ?? sheetTheme?.modalElevation ?? sheetTheme?.elevation,
         shape: shape,
-        isScrollControlled: isScrollControlled
+        clipBehavior: clipBehavior,
+        isScrollControlled: isScrollControlled,
       ),
     );
     if (theme != null)
@@ -405,6 +432,13 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
 /// that a modal [BottomSheet] needs to be displayed above all other content
 /// but the caller is inside another [Navigator].
 ///
+/// The [isDismissible] parameter specifies whether the bottom sheet will be
+/// dismissed when user taps on the scrim.
+///
+/// The optional [backgroundColor], [elevation], [shape], and [clipBehavior]
+/// parameters can be passed in to customize the appearance and behavior of
+/// modal bottom sheets.
+///
 /// Returns a `Future` that resolves to the value (if any) that was passed to
 /// [Navigator.pop] when the modal bottom sheet was closed.
 ///
@@ -423,13 +457,16 @@ Future<T> showModalBottomSheet<T>({
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
+  Clip clipBehavior,
   bool isScrollControlled = false,
   bool useRootNavigator = false,
+  bool isDismissible = true,
 }) {
   assert(context != null);
   assert(builder != null);
   assert(isScrollControlled != null);
   assert(useRootNavigator != null);
+  assert(isDismissible != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
 
@@ -441,6 +478,8 @@ Future<T> showModalBottomSheet<T>({
     backgroundColor: backgroundColor,
     elevation: elevation,
     shape: shape,
+    clipBehavior: clipBehavior,
+    isDismissible: isDismissible,
   ));
 }
 
@@ -450,16 +489,20 @@ Future<T> showModalBottomSheet<T>({
 /// Returns a controller that can be used to close and otherwise manipulate the
 /// bottom sheet.
 ///
+/// The optional [backgroundColor], [elevation], [shape], and [clipBehavior]
+/// parameters can be passed in to customize the appearance and behavior of
+/// persistent bottom sheets.
+///
 /// To rebuild the bottom sheet (e.g. if it is stateful), call
 /// [PersistentBottomSheetController.setState] on the controller returned by
 /// this method.
 ///
 /// The new bottom sheet becomes a [LocalHistoryEntry] for the enclosing
-/// [ModalRoute] and a back button is added to the appbar of the [Scaffold]
+/// [ModalRoute] and a back button is added to the app bar of the [Scaffold]
 /// that closes the bottom sheet.
 ///
 /// To create a persistent bottom sheet that is not a [LocalHistoryEntry] and
-/// does not add a back button to the enclosing Scaffold's appbar, use the
+/// does not add a back button to the enclosing Scaffold's app bar, use the
 /// [Scaffold.bottomSheet] constructor parameter.
 ///
 /// A closely related widget is a modal bottom sheet, which is an alternative
@@ -485,6 +528,7 @@ PersistentBottomSheetController<T> showBottomSheet<T>({
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
+  Clip clipBehavior,
 }) {
   assert(context != null);
   assert(builder != null);
@@ -495,5 +539,6 @@ PersistentBottomSheetController<T> showBottomSheet<T>({
     backgroundColor: backgroundColor,
     elevation: elevation,
     shape: shape,
+    clipBehavior: clipBehavior,
   );
 }

@@ -1,4 +1,4 @@
-// Copyright 2017 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -44,6 +44,8 @@ class CrashReportSender {
 
   static CrashReportSender get instance => _instance ?? CrashReportSender._(http.Client());
 
+  bool _crashReportSent = false;
+
   /// Overrides the default [http.Client] with [client] for testing purposes.
   @visibleForTesting
   static void initializeWith(http.Client client) {
@@ -76,6 +78,10 @@ class CrashReportSender {
     @required String getFlutterVersion(),
     @required String command,
   }) async {
+    // Only send one crash report per run.
+    if (_crashReportSent) {
+      return;
+    }
     try {
       final String flutterVersion = getFlutterVersion();
 
@@ -84,7 +90,7 @@ class CrashReportSender {
         return;
       }
 
-      printStatus('Sending crash report to Google.');
+      printTrace('Sending crash report to Google.');
 
       final Uri uri = _baseUrl.replace(
         queryParameters: <String, String>{
@@ -115,12 +121,13 @@ class CrashReportSender {
       if (resp.statusCode == 200) {
         final String reportId = await http.ByteStream(resp.stream)
             .bytesToString();
-        printStatus('Crash report sent (report ID: $reportId)');
+        printTrace('Crash report sent (report ID: $reportId)');
+        _crashReportSent = true;
       } else {
         printError('Failed to send crash report. Server responded with HTTP status code ${resp.statusCode}');
       }
     } catch (sendError, sendStackTrace) {
-      if (sendError is SocketException) {
+      if (sendError is SocketException || sendError is HttpException) {
         printError('Failed to send crash report due to a network error: $sendError');
       } else {
         // If the sender itself crashes, just print. We did our best.

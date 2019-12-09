@@ -1,4 +1,4 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -29,6 +29,8 @@ import '../common/render_tree.dart';
 import '../common/request_data.dart';
 import '../common/semantics.dart';
 import '../common/text.dart';
+import '../common/wait.dart';
+import 'wait_conditions.dart';
 
 const String _extensionMethodName = 'driver';
 const String _extensionMethod = 'ext.flutter.$_extensionMethodName';
@@ -54,6 +56,11 @@ class _DriverBinding extends BindingBase with ServicesBinding, SchedulerBinding,
       callback: extension.call,
     );
   }
+
+  @override
+  BinaryMessenger createBinaryMessenger() {
+    return TestDefaultBinaryMessenger(super.createBinaryMessenger());
+  }
 }
 
 /// Enables Flutter Driver VM service extension.
@@ -69,7 +76,7 @@ class _DriverBinding extends BindingBase with ServicesBinding, SchedulerBinding,
 ///
 /// `silenceErrors` will prevent exceptions from being logged. This is useful
 /// for tests where exceptions are expected. Defaults to false. Any errors
-/// will still be returned in the `response` field of the result json along
+/// will still be returned in the `response` field of the result JSON along
 /// with an `isError` boolean.
 void enableFlutterDriverExtension({ DataHandler handler, bool silenceErrors = false }) {
   assert(WidgetsBinding.instance == null);
@@ -112,9 +119,10 @@ class FlutterDriverExtension {
       'tap': _tap,
       'waitFor': _waitFor,
       'waitForAbsent': _waitForAbsent,
-      'waitUntilNoTransientCallbacks': _waitUntilNoTransientCallbacks,
-      'waitUntilNoPendingFrame': _waitUntilNoPendingFrame,
-      'waitUntilFirstFrameRasterized': _waitUntilFirstFrameRasterized,
+      'waitForCondition': _waitForCondition,
+      'waitUntilNoTransientCallbacks': _waitUntilNoTransientCallbacks, // ignore: deprecated_member_use_from_same_package
+      'waitUntilNoPendingFrame': _waitUntilNoPendingFrame, // ignore: deprecated_member_use_from_same_package
+      'waitUntilFirstFrameRasterized': _waitUntilFirstFrameRasterized, // ignore: deprecated_member_use_from_same_package
       'get_semantics_id': _getSemanticsId,
       'get_offset': _getOffset,
       'get_diagnostics_tree': _getDiagnosticsTree,
@@ -134,9 +142,10 @@ class FlutterDriverExtension {
       'tap': (Map<String, String> params) => Tap.deserialize(params),
       'waitFor': (Map<String, String> params) => WaitFor.deserialize(params),
       'waitForAbsent': (Map<String, String> params) => WaitForAbsent.deserialize(params),
-      'waitUntilNoTransientCallbacks': (Map<String, String> params) => WaitUntilNoTransientCallbacks.deserialize(params),
-      'waitUntilNoPendingFrame': (Map<String, String> params) => WaitUntilNoPendingFrame.deserialize(params),
-      'waitUntilFirstFrameRasterized': (Map<String, String> params) => WaitUntilFirstFrameRasterized.deserialize(params),
+      'waitForCondition': (Map<String, String> params) => WaitForCondition.deserialize(params),
+      'waitUntilNoTransientCallbacks': (Map<String, String> params) => WaitUntilNoTransientCallbacks.deserialize(params), // ignore: deprecated_member_use_from_same_package
+      'waitUntilNoPendingFrame': (Map<String, String> params) => WaitUntilNoPendingFrame.deserialize(params), // ignore: deprecated_member_use_from_same_package
+      'waitUntilFirstFrameRasterized': (Map<String, String> params) => WaitUntilFirstFrameRasterized.deserialize(params), // ignore: deprecated_member_use_from_same_package
       'get_semantics_id': (Map<String, String> params) => GetSemanticsId.deserialize(params),
       'get_offset': (Map<String, String> params) => GetOffset.deserialize(params),
       'get_diagnostics_tree': (Map<String, String> params) => GetDiagnosticsTree.deserialize(params),
@@ -159,7 +168,9 @@ class FlutterDriverExtension {
   final DataHandler _requestDataHandler;
   final bool _silenceErrors;
 
-  static final Logger _log = Logger('FlutterDriverExtension');
+  void _log(String message) {
+    driverLog('FlutterDriverExtension', message);
+  }
 
   final WidgetController _prober = LiveWidgetController(WidgetsBinding.instance);
   final Map<String, CommandHandlerCallback> _commandHandlers = <String, CommandHandlerCallback>{};
@@ -198,14 +209,14 @@ class FlutterDriverExtension {
       final Result response = await responseFuture;
       return _makeResponse(response?.toJson());
     } on TimeoutException catch (error, stackTrace) {
-      final String msg = 'Timeout while executing $commandKind: $error\n$stackTrace';
-      _log.error(msg);
-      return _makeResponse(msg, isError: true);
+      final String message = 'Timeout while executing $commandKind: $error\n$stackTrace';
+      _log(message);
+      return _makeResponse(message, isError: true);
     } catch (error, stackTrace) {
-      final String msg = 'Uncaught extension error while executing $commandKind: $error\n$stackTrace';
+      final String message = 'Uncaught extension error while executing $commandKind: $error\n$stackTrace';
       if (!_silenceErrors)
-        _log.error(msg);
-      return _makeResponse(msg, isError: true);
+        _log(message);
+      return _makeResponse(message, isError: true);
     }
   }
 
@@ -223,6 +234,10 @@ class FlutterDriverExtension {
   }
 
   // This can be used to wait for the first frame being rasterized during app launch.
+  @Deprecated(
+    'This method has been deprecated in favor of _waitForCondition. '
+    'This feature was deprecated after v1.9.3.'
+  )
   Future<Result> _waitUntilFirstFrameRasterized(Command command) async {
     await WidgetsBinding.instance.waitUntilFirstFrameRasterized;
     return null;
@@ -325,19 +340,21 @@ class FlutterDriverExtension {
   }
 
   Finder _createAncestorFinder(Ancestor arguments) {
-    return find.ancestor(
+    final Finder finder = find.ancestor(
       of: _createFinder(arguments.of),
       matching: _createFinder(arguments.matching),
       matchRoot: arguments.matchRoot,
     );
+    return arguments.firstMatchOnly ? finder.first : finder;
   }
 
   Finder _createDescendantFinder(Descendant arguments) {
-    return find.descendant(
+    final Finder finder = find.descendant(
       of: _createFinder(arguments.of),
       matching: _createFinder(arguments.matching),
       matchRoot: arguments.matchRoot,
     );
+    return arguments.firstMatchOnly ? finder.first : finder;
   }
 
   Finder _createFinder(SerializableFinder finder) {
@@ -370,6 +387,18 @@ class FlutterDriverExtension {
     return const WaitForAbsentResult();
   }
 
+  Future<Result> _waitForCondition(Command command) async {
+    assert(command != null);
+    final WaitForCondition waitForConditionCommand = command;
+    final WaitCondition condition = deserializeCondition(waitForConditionCommand.condition);
+    await condition.wait();
+    return null;
+  }
+
+  @Deprecated(
+    'This method has been deprecated in favor of _waitForCondition. '
+    'This feature was deprecated after v1.9.3.'
+  )
   Future<Result> _waitUntilNoTransientCallbacks(Command command) async {
     if (SchedulerBinding.instance.transientCallbackCount != 0)
       await _waitUntilFrame(() => SchedulerBinding.instance.transientCallbackCount == 0);
@@ -393,6 +422,12 @@ class FlutterDriverExtension {
   /// `set_frame_sync` method. See [FlutterDriver.runUnsynchronized] for more
   /// details on how to do this. Note, disabling frame sync will require the
   /// test author to use some other method to avoid flakiness.
+  ///
+  /// This method has been deprecated in favor of [_waitForCondition].
+  @Deprecated(
+    'This method has been deprecated in favor of _waitForCondition. '
+    'This feature was deprecated after v1.9.3.'
+  )
   Future<Result> _waitUntilNoPendingFrame(Command command) async {
     await _waitUntilFrame(() {
       return SchedulerBinding.instance.transientCallbackCount == 0
@@ -404,7 +439,11 @@ class FlutterDriverExtension {
   Future<GetSemanticsIdResult> _getSemanticsId(Command command) async {
     final GetSemanticsId semanticsCommand = command;
     final Finder target = await _waitForElement(_createFinder(semanticsCommand.finder));
-    final Element element = target.evaluate().single;
+    final Iterable<Element> elements = target.evaluate();
+    if (elements.length > 1) {
+      throw StateError('Found more than one element with the same ID: $elements');
+    }
+    final Element element = elements.single;
     RenderObject renderObject = element.renderObject;
     SemanticsNode node;
     while (renderObject != null && node == null) {

@@ -1,4 +1,4 @@
-// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -10,16 +10,19 @@ import '../base/common.dart';
 import '../base/file_system.dart';
 import '../base/io.dart';
 import '../base/os.dart';
+import '../base/platform.dart';
 import '../base/process.dart';
 import '../cache.dart';
 import '../dart/pub.dart';
 import '../globals.dart';
+import '../persistent_tool_state.dart';
 import '../runner/flutter_command.dart';
 import '../version.dart';
 import 'channel.dart';
 
 class UpgradeCommand extends FlutterCommand {
-  UpgradeCommand() {
+  UpgradeCommand([UpgradeCommandRunner commandRunner])
+    : _commandRunner = commandRunner ?? UpgradeCommandRunner() {
     argParser
       ..addFlag(
         'force',
@@ -31,9 +34,13 @@ class UpgradeCommand extends FlutterCommand {
         'continue',
         hide: true,
         negatable: false,
-        help: 'For the second half of the upgrade flow requiring the new version of Flutter. Should not be invoked manually, but re-entrantly by the standard upgrade command.',
+        help: 'For the second half of the upgrade flow requiring the new '
+              'version of Flutter. Should not be invoked manually, but '
+              're-entrantly by the standard upgrade command.',
       );
   }
+
+  final UpgradeCommandRunner _commandRunner;
 
   @override
   final String name = 'upgrade';
@@ -45,16 +52,10 @@ class UpgradeCommand extends FlutterCommand {
   bool get shouldUpdateCache => false;
 
   @override
-  Future<Set<DevelopmentArtifact>> get requiredArtifacts async => <DevelopmentArtifact>{
-    DevelopmentArtifact.universal,
-  };
-
-  @override
   Future<FlutterCommandResult> runCommand() async {
-    final UpgradeCommandRunner upgradeCommandRunner = UpgradeCommandRunner();
-    await upgradeCommandRunner.runCommand(
-      argResults['force'],
-      argResults['continue'],
+    await _commandRunner.runCommand(
+      boolArg('force'),
+      boolArg('continue'),
       GitTagVersion.determine(),
       FlutterVersion.instance,
     );
@@ -121,7 +122,7 @@ class UpgradeCommandRunner {
   }
 
   Future<void> flutterUpgradeContinue() async {
-    final int code = await runCommandAndStreamOutput(
+    final int code = await processUtils.stream(
       <String>[
         fs.path.join('bin', 'flutter'),
         'upgrade',
@@ -130,6 +131,7 @@ class UpgradeCommandRunner {
       ],
       workingDirectory: Cache.flutterRoot,
       allowReentrantFlutter: true,
+      environment: Map<String, String>.of(platform.environment),
     );
     if (code != 0) {
       throwToolExit(null, exitCode: code);
@@ -139,16 +141,22 @@ class UpgradeCommandRunner {
   // This method should only be called if the upgrade command is invoked
   // re-entrantly with the `--continue` flag
   Future<void> runCommandSecondHalf(FlutterVersion flutterVersion) async {
+    // Make sure the welcome message re-display is delayed until the end.
+    persistentToolState.redisplayWelcomeMessage = false;
     await precacheArtifacts();
     await updatePackages(flutterVersion);
     await runDoctor();
+    // Force the welcome message to re-display following the upgrade.
+    persistentToolState.redisplayWelcomeMessage = true;
   }
 
   Future<bool> hasUncomittedChanges() async {
     try {
-      final RunResult result = await runCheckedAsync(<String>[
-        'git', 'status', '-s'
-      ], workingDirectory: Cache.flutterRoot);
+      final RunResult result = await processUtils.run(
+        <String>['git', 'status', '-s'],
+        throwOnError: true,
+        workingDirectory: Cache.flutterRoot,
+      );
       return result.stdout.trim().isNotEmpty;
     } on ProcessException catch (error) {
       throwToolExit(
@@ -167,9 +175,11 @@ class UpgradeCommandRunner {
   /// Exits tool if there is no upstream.
   Future<void> verifyUpstreamConfigured() async {
     try {
-      await runCheckedAsync(<String>[
-        'git', 'rev-parse', '@{u}',
-      ], workingDirectory: Cache.flutterRoot);
+      await processUtils.run(
+        <String>[ 'git', 'rev-parse', '@{u}'],
+        throwOnError: true,
+        workingDirectory: Cache.flutterRoot,
+      );
     } catch (e) {
       throwToolExit(
         'Unable to upgrade Flutter: no origin repository configured. '
@@ -191,9 +201,11 @@ class UpgradeCommandRunner {
       tag = 'v${gitTagVersion.x}.${gitTagVersion.y}.${gitTagVersion.z}';
     }
     try {
-      await runCheckedAsync(<String>[
-        'git', 'reset', '--hard', tag,
-      ], workingDirectory: Cache.flutterRoot);
+      await processUtils.run(
+        <String>['git', 'reset', '--hard', tag],
+        throwOnError: true,
+        workingDirectory: Cache.flutterRoot,
+      );
     } on ProcessException catch (error) {
       throwToolExit(
         'Unable to upgrade Flutter: The tool could not update to the version $tag. '
@@ -218,7 +230,7 @@ class UpgradeCommandRunner {
   /// If there haven't been any hot fixes or local changes, this is equivalent
   /// to a fast-forward.
   Future<void> attemptFastForward() async {
-    final int code = await runCommandAndStreamOutput(
+    final int code = await processUtils.stream(
       <String>['git', 'pull', '--ff'],
       workingDirectory: Cache.flutterRoot,
       mapFunction: (String line) => matchesGitLine(line) ? null : line,
@@ -236,12 +248,13 @@ class UpgradeCommandRunner {
   Future<void> precacheArtifacts() async {
     printStatus('');
     printStatus('Upgrading engine...');
-    final int code = await runCommandAndStreamOutput(
+    final int code = await processUtils.stream(
       <String>[
         fs.path.join('bin', 'flutter'), '--no-color', '--no-version-check', 'precache',
       ],
       workingDirectory: Cache.flutterRoot,
       allowReentrantFlutter: true,
+      environment: Map<String, String>.of(platform.environment),
     );
     if (code != 0) {
       throwToolExit(null, exitCode: code);
@@ -255,7 +268,7 @@ class UpgradeCommandRunner {
     final String projectRoot = findProjectRoot();
     if (projectRoot != null) {
       printStatus('');
-      await pubGet(context: PubContext.pubUpgrade, directory: projectRoot, upgrade: true, checkLastModified: false);
+      await pub.get(context: PubContext.pubUpgrade, directory: projectRoot, upgrade: true, checkLastModified: false);
     }
   }
 
@@ -263,7 +276,7 @@ class UpgradeCommandRunner {
   Future<void> runDoctor() async {
     printStatus('');
     printStatus('Running flutter doctor...');
-    await runCommandAndStreamOutput(
+    await processUtils.stream(
       <String>[
         fs.path.join('bin', 'flutter'), '--no-version-check', 'doctor',
       ],

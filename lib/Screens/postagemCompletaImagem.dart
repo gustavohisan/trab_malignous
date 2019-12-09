@@ -97,8 +97,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                                               widget.postagem.fotoTopico)))),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.02),
+                                    left: MediaQuery.of(context).size.width * 0.02),
                                 child: Column(
                                   children: <Widget>[
                                     Container(
@@ -108,8 +107,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                                         widget.postagem.tituloTopico,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
-                                          color:
-                                              Color.fromRGBO(112, 112, 112, 1),
+                                          color: Color.fromRGBO(112, 112, 112, 1),
                                         ),
                                       ),
                                     ),
@@ -125,8 +123,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                                         style: TextStyle(
                                           fontSize: MediaQuery.of(context).size.height * 0.02,
                                           fontWeight: FontWeight.w300,
-                                          color:
-                                              Color.fromRGBO(112, 112, 112, 1),
+                                          color: Color.fromRGBO(112, 112, 112, 1),
                                         ),
                                       ),
                                     ),
@@ -165,7 +162,8 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                         ),
                         alignment: Alignment.center,
                         onPressed: () {},
-                        color: Color.fromRGBO(112, 112, 112, 1)),
+                        color: Color.fromRGBO(112, 112, 112, 1),
+                      ),
                       Text(
                         "1000",
                         textAlign: TextAlign.left,
@@ -173,7 +171,6 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                           color: Color.fromRGBO(112, 112, 112, 1),
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
-                      
                         ),
                       ),
                     ],
@@ -291,7 +288,7 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                             ),
                           ),
                           Icon(Icons.sentiment_dissatisfied,
-                          size: MediaQuery.of(context).size.width * 0.1,
+                          size: 32,
                           color: Color.fromRGBO(112, 112, 112, 1),)
                         ],
                       ),

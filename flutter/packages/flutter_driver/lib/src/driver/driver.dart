@@ -1,4 +1,4 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -28,6 +28,7 @@ import '../common/render_tree.dart';
 import '../common/request_data.dart';
 import '../common/semantics.dart';
 import '../common/text.dart';
+import '../common/wait.dart';
 import 'common.dart';
 import 'timeline.dart';
 
@@ -92,7 +93,9 @@ String _timelineStreamsToString(List<TimelineStream> streams) {
   return '[$contents]';
 }
 
-final Logger _log = Logger('FlutterDriver');
+void _log(String message) {
+  driverLog('FlutterDriver', message);
+}
 
 Future<T> _warnIfSlow<T>({
   @required Future<T> future,
@@ -102,7 +105,7 @@ Future<T> _warnIfSlow<T>({
   assert(future != null);
   assert(timeout != null);
   assert(message != null);
-  return future..timeout(timeout, onTimeout: () { _log.warning(message); return null; });
+  return future..timeout(timeout, onTimeout: () { _log(message); return null; });
 }
 
 /// A convenient accessor to frequently used finders.
@@ -200,9 +203,12 @@ class FlutterDriver {
     // If the user has already supplied an isolate number/URL to the Dart VM
     // service, then this won't be run as it is unnecessary.
     if (Platform.isFuchsia && isolateNumber == null) {
-      // TODO(awdavies): Use something other than print. On fuchsia
-      // `stderr`/`stdout` appear to have issues working correctly.
-      flutterDriverLog.listen(print);
+      // On Fuchsia stderr/stdout appear to have issues working correctly,
+      // so we work around the issue by using print directly.
+      // TODO(awdavies): Fix Dart or Fuchsia to not need this workaround.
+      driverLog = (String source, String message) {
+        print('$source: $message');
+      };
       fuchsiaModuleTarget ??= Platform.environment['FUCHSIA_MODULE_TARGET'];
       if (fuchsiaModuleTarget == null) {
         throw DriverError(
@@ -233,7 +239,7 @@ class FlutterDriver {
     }
 
     // Connect to Dart VM services
-    _log.info('Connecting to Flutter application at $dartVmServiceUrl');
+    _log('Connecting to Flutter application at $dartVmServiceUrl');
     final VMServiceClientConnection connection =
         await vmServiceConnectFunction(dartVmServiceUrl);
     final VMServiceClient client = connection.client;
@@ -242,7 +248,7 @@ class FlutterDriver {
         null ? vm.isolates.first :
                vm.isolates.firstWhere(
                    (VMIsolateRef isolate) => isolate.number == isolateNumber);
-    _log.trace('Isolate found with number: ${isolateRef.number}');
+    _log('Isolate found with number: ${isolateRef.number}');
 
     VMIsolate isolate = await isolateRef.loadRunnable();
 
@@ -274,12 +280,12 @@ class FlutterDriver {
     // the isolate is already resumed. There could be a race with other tools,
     // such as a debugger, any of which could have resumed the isolate.
     Future<dynamic> resumeLeniently() {
-      _log.trace('Attempting to resume isolate');
+      _log('Attempting to resume isolate...');
       return isolate.resume().catchError((dynamic e) {
         const int vmMustBePausedCode = 101;
         if (e is rpc.RpcException && e.code == vmMustBePausedCode) {
           // No biggie; something else must have resumed the isolate
-          _log.warning(
+          _log(
             'Attempted to resume an already resumed isolate. This may happen '
             'when we lose a race with another tool (usually a debugger) that '
             'is connected to the same isolate.'
@@ -314,7 +320,7 @@ class FlutterDriver {
 
     // Attempt to resume isolate if it was paused
     if (isolate.pauseEvent is VMPauseStartEvent) {
-      _log.trace('Isolate is paused at start.');
+      _log('Isolate is paused at start.');
 
       // If the isolate is paused at the start, e.g. via the --start-paused
       // option, then the VM service extension is not registered yet. Wait for
@@ -324,7 +330,7 @@ class FlutterDriver {
       final Future<dynamic> whenResumed = resumeLeniently();
       await whenResumed;
 
-      _log.trace('Waiting for service extension');
+      _log('Waiting for service extension...');
       // We will never receive the extension event if the user does not
       // register it. If that happens, show a message but continue waiting.
       await _warnIfSlow<String>(
@@ -341,12 +347,12 @@ class FlutterDriver {
                isolate.pauseEvent is VMPauseInterruptedEvent) {
       // If the isolate is paused for any other reason, assume the extension is
       // already there.
-      _log.trace('Isolate is paused mid-flight.');
+      _log('Isolate is paused mid-flight.');
       await resumeLeniently();
     } else if (isolate.pauseEvent is VMResumeEvent) {
-      _log.trace('Isolate is not paused. Assuming application is ready.');
+      _log('Isolate is not paused. Assuming application is ready.');
     } else {
-      _log.warning(
+      _log(
         'Unknown pause event type ${isolate.pauseEvent.runtimeType}. '
         'Assuming application is ready.'
       );
@@ -362,10 +368,7 @@ class FlutterDriver {
         if (e.code != error_code.METHOD_NOT_FOUND) {
           rethrow;
         }
-        _log.trace(
-          'Check Health failed, try to wait for the service extensions to be'
-          'registered.'
-        );
+        _log('Check Health failed, try to wait for the service extensions to be registered.');
         await enableIsolateStreams();
         await waitForServiceExtension();
         return driver.checkHealth();
@@ -378,7 +381,7 @@ class FlutterDriver {
       throw DriverError('Flutter application health check failed.');
     }
 
-    _log.info('Connected to Flutter application.');
+    _log('Connected to Flutter application.');
     return driver;
   }
 
@@ -402,11 +405,7 @@ class FlutterDriver {
     if (!_peer.isClosed || _dartVmReconnectUrl == null) {
       return;
     }
-
-    _log.warning(
-        'Peer connection is closed! Trying to restore the connection...'
-    );
-
+    _log('Peer connection is closed! Trying to restore the connection...');
     final String webSocketUrl = _getWebSocketUrl(_dartVmReconnectUrl);
     final WebSocket ws = await WebSocket.connect(webSocketUrl);
     ws.done.whenComplete(() => _checkCloseCode(ws));
@@ -458,7 +457,7 @@ class FlutterDriver {
 
   void _logCommunication(String message) {
     if (_printCommunication)
-      _log.info(message);
+      _log(message);
     if (_logCommunicationToFile) {
       final f.File file = fs.file(p.join(testOutputsDirectory, 'flutter_driver_commands_$_driverId.log'));
       file.createSync(recursive: true); // no-op if file exists
@@ -491,12 +490,17 @@ class FlutterDriver {
     await _sendCommand(WaitForAbsent(finder, timeout: timeout));
   }
 
+  /// Waits until the given [waitCondition] is satisfied.
+  Future<void> waitForCondition(SerializableWaitCondition waitCondition, {Duration timeout}) async {
+    await _sendCommand(WaitForCondition(waitCondition, timeout: timeout));
+  }
+
   /// Waits until there are no more transient callbacks in the queue.
   ///
   /// Use this method when you need to wait for the moment when the application
   /// becomes "stable", for example, prior to taking a [screenshot].
   Future<void> waitUntilNoTransientCallbacks({ Duration timeout }) async {
-    await _sendCommand(WaitUntilNoTransientCallbacks(timeout: timeout));
+    await _sendCommand(WaitForCondition(const NoTransientCallbacks(), timeout: timeout));
   }
 
   /// Waits until the next [Window.onReportTimings] is called.
@@ -504,7 +508,7 @@ class FlutterDriver {
   /// Use this method to wait for the first frame to be rasterized during the
   /// app launch.
   Future<void> waitUntilFirstFrameRasterized() async {
-    await _sendCommand(const WaitUntilFirstFrameRasterized());
+    await _sendCommand(const WaitForCondition(FirstFrameRasterized()));
   }
 
   Future<DriverOffset> _getOffset(SerializableFinder finder, OffsetType type, { Duration timeout }) async {
@@ -969,7 +973,7 @@ class FlutterDriver {
     await action();
 
     if (!(await _isPrecompiledMode())) {
-      _log.warning(_kDebugWarning);
+      _log(_kDebugWarning);
     }
     return stopTracingAndDownloadTimeline();
   }
@@ -1110,19 +1114,18 @@ void _unhandledJsonRpcError(dynamic error, dynamic stack) {
   if (_ignoreRpcError(error)) {
     return;
   }
-  _log.trace('Unhandled RPC error:\n$error\n$stack');
+  _log('Unhandled RPC error:\n$error\n$stack');
   // TODO(dnfield): https://github.com/flutter/flutter/issues/31813
   // assert(false);
 }
 
 String _getWebSocketUrl(String url) {
   Uri uri = Uri.parse(url);
-  final List<String> pathSegments = <String>[];
-  // If there's an authentication code (default), we need to add it to our path.
-  if (uri.pathSegments.isNotEmpty) {
-    pathSegments.add(uri.pathSegments.first);
-  }
-  pathSegments.add('ws');
+  final List<String> pathSegments = <String>[
+    // If there's an authentication code (default), we need to add it to our path.
+    if (uri.pathSegments.isNotEmpty) uri.pathSegments.first,
+    'ws',
+  ];
   if (uri.scheme == 'http')
     uri = uri.replace(scheme: 'ws', pathSegments: pathSegments);
   return uri.toString();
@@ -1130,7 +1133,7 @@ String _getWebSocketUrl(String url) {
 
 void _checkCloseCode(WebSocket ws) {
   if (ws.closeCode != 1000 && ws.closeCode != null) {
-    _log.warning('$ws is closed with an unexpected code ${ws.closeCode}');
+    _log('$ws is closed with an unexpected code ${ws.closeCode}');
   }
 }
 
@@ -1160,7 +1163,7 @@ Future<VMServiceClientConnection> _waitAndConnect(String url) async {
       await ws1?.close();
       await ws2?.close();
       if (attempts > 5)
-        _log.warning('It is taking an unusually long time to connect to the VM...');
+        _log('It is taking an unusually long time to connect to the VM...');
       attempts += 1;
       await Future<void>.delayed(_kPauseBetweenReconnectAttempts);
     }
@@ -1194,22 +1197,30 @@ class CommonFinders {
   ///
   /// If the `matchRoot` argument is true then the widget specified by `of` will
   /// be considered for a match. The argument defaults to false.
+  ///
+  /// If `firstMatchOnly` is true then only the first ancestor matching
+  /// `matching` will be returned. Defaults to false.
   SerializableFinder ancestor({
     @required SerializableFinder of,
     @required SerializableFinder matching,
     bool matchRoot = false,
-  }) => Ancestor(of: of, matching: matching, matchRoot: matchRoot);
+    bool firstMatchOnly = false,
+  }) => Ancestor(of: of, matching: matching, matchRoot: matchRoot, firstMatchOnly: firstMatchOnly);
 
   /// Finds the widget that is an descendant of the `of` parameter and that
   /// matches the `matching` parameter.
   ///
   /// If the `matchRoot` argument is true then the widget specified by `of` will
   /// be considered for a match. The argument defaults to false.
+  ///
+  /// If `firstMatchOnly` is true then only the first descendant matching
+  /// `matching` will be returned. Defaults to false.
   SerializableFinder descendant({
     @required SerializableFinder of,
     @required SerializableFinder matching,
     bool matchRoot = false,
-  }) => Descendant(of: of, matching: matching, matchRoot: matchRoot);
+    bool firstMatchOnly = false,
+  }) => Descendant(of: of, matching: matching, matchRoot: matchRoot, firstMatchOnly: firstMatchOnly);
 }
 
 /// An immutable 2D floating-point offset used by Flutter Driver.
@@ -1235,5 +1246,5 @@ class DriverOffset {
   }
 
   @override
-  int get hashCode => dx.hashCode + dy.hashCode;
+  int get hashCode => dx.hashCode ^ dy.hashCode;
 }

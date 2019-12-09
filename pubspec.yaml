@@ -28,7 +28,7 @@ dependencies:
   dio: ^3.0.6 
   intl:
   transparent_image: ^0.1.0
-  responsive_container: ^0.0.1
+  draggable_scrollbar: ^0.0.4
 
 
 dev_dependencies:
