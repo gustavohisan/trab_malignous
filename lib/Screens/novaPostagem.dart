@@ -500,7 +500,7 @@ class _Formulario extends State<Formulario> {
                           ],
                         ),
                       )),
-                      //Formularios otro
+                      //Formularios vídeo
                       JanelaVideo(),
                     ],
                   );
