@@ -26,8 +26,10 @@ class _MeuPerfil extends State<MeuPerfil> {
       future: getMinhasPublicacoes(),
       builder: (context, projectSnap) {
         return projectSnap.hasData
-            ? ListView.builder(
+            ? Scrollbar( 
+              child: ListView.builder(
                 itemCount: projectSnap.data.length,
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.25),
                 //Scroll vertical
                 scrollDirection: Axis.vertical,
                 //Começa a criação
@@ -47,6 +49,7 @@ class _MeuPerfil extends State<MeuPerfil> {
                   }
                 }
               )
+            )
             : Center(child: CircularProgressIndicator());
       });
   }

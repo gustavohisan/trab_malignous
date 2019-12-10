@@ -42,6 +42,7 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                   onPressed: () {
                     _paginaInicial = true;
                     runApp(MyApp());
+                    
                   }
                 ),
               ),
