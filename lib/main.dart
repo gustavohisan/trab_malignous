@@ -17,10 +17,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
-  final GlobalKey<RefreshIndicatorState> _recarregarInicioChave =
+  /*final GlobalKey<RefreshIndicatorState> _recarregarInicioChave =
       new GlobalKey<RefreshIndicatorState>();
   final GlobalKey<RefreshIndicatorState> _recarregarMeuPerfilChave =
-      new GlobalKey<RefreshIndicatorState>();
+      new GlobalKey<RefreshIndicatorState>();*/
   @override
   void initState() {
     super.initState();
@@ -57,7 +57,7 @@ class _MyApp extends State<MyApp> {
     );
   }
 
-  Future<Null> _recarregar() async {
+  /*Future<Null> _recarregar() async {
     setState(() => MyApp);
-  }
+  }*/
 }
