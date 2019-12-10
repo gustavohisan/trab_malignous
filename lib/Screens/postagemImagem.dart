@@ -6,6 +6,7 @@ import 'package:trab_malignous/API/Api.dart';
 import 'package:trab_malignous/Screens/postagemCompletaImagem.dart';
 import '../Model/Postagem.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:trab_malignous/main.dart';
 
 class PostagemImagem extends StatefulWidget {
   final Postagem postagem;
@@ -165,10 +166,12 @@ class _PostagemImagem extends State<PostagemImagem> {
                                 avaliar(widget.postagem.id);
                                 aumentarCurtidas(widget.postagem.id);
                                 this.botaoGostei = true;
+                                widget.postagem.quantAvaliacoes++;
                               } else {
                                 desavaliar(widget.postagem.id);
                                 diminuirCurtidas(widget.postagem.id);
                                 this.botaoGostei = false;
+                                widget.postagem.quantAvaliacoes--;
                               }
                             });
                           },

@@ -164,10 +164,12 @@ class _PostagemMeuPerfilImagem extends State<PostagemMeuPerfilImagem> {
                                 avaliar(widget.postagem.id);
                                 aumentarCurtidas(widget.postagem.id);
                                 this.botaoGostei = true;
+                                widget.postagem.quantAvaliacoes++;
                               } else {
                                 desavaliar(widget.postagem.id);
                                 diminuirCurtidas(widget.postagem.id);
                                 this.botaoGostei = false;
+                                widget.postagem.quantAvaliacoes--;
                               }
                             });
                           },

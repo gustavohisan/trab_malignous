@@ -3,6 +3,7 @@ import '../Model/Postagem.dart';
 import 'informacaoUsuario.dart' as infoUsuario;
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:trab_malignous/API/Api.dart';
 
 class PostagemCompletaImagem extends StatefulWidget {
   final Postagem postagem;
@@ -16,6 +17,7 @@ class PostagemCompletaImagem extends StatefulWidget {
 
 class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
   String _selecionadoOrdem;
+  bool botaoGostei = false;
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +145,25 @@ class _PostagemCompletaImagem extends State<PostagemCompletaImagem> {
                     children: <Widget>[
                       IconButton(
                         icon: Icon(Icons.thumb_up),
-                        color: Color.fromRGBO(112, 112, 112, 1),
+                        color: this.botaoGostei
+                                ? Colors.blue
+                                : Color.fromRGBO(112, 112, 112, 1),
                         iconSize: 24,
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                              if (!this.botaoGostei) {
+                                  avaliar(widget.postagem.id);
+                                  aumentarCurtidas(widget.postagem.id);
+                                  this.botaoGostei = true;
+                                  widget.postagem.quantAvaliacoes++;
+                                } else {
+                                  desavaliar(widget.postagem.id);
+                                  diminuirCurtidas(widget.postagem.id);
+                                  this.botaoGostei = false;
+                                  widget.postagem.quantAvaliacoes--;
+                                }
+                            });
+                        },
                       ),
                       Text(
                         widget.postagem.quantAvaliacoes.toString(),
