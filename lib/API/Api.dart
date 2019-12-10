@@ -73,7 +73,7 @@ Future<bool> diminuirCurtidas(int id) async {
 }
 
 void postTexto(String titulo, String corpoDaPublicacao, String tituloTopico,
-    int idDoUsuario) async {
+    int idDoUsuario, String tipo) async {
   Response response = await Dio().request(
       url.toString() + '/idDoTopicoPorNome/' + tituloTopico,
       options: Options(headers: {"Accept": "application/json"}, method: 'GET'));
@@ -82,7 +82,7 @@ void postTexto(String titulo, String corpoDaPublicacao, String tituloTopico,
   var postagem = new Postagem(
     corpo: corpoDaPublicacao,
     situacao: true,
-    tipo: "texto",
+    tipo: tipo,
     tituloPublicacao: titulo,
     idUsuario: idDoUsuario,
     idTopico: topico.id,

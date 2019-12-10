@@ -261,7 +261,215 @@ class _Formulario extends State<Formulario> {
                                       _valorTitulo.isNotEmpty &&
                                       _valorDropdown.isNotEmpty) {
                                     postTexto(_valorTitulo, _valorTexto.text,
-                                        _valorDropdown, infoUsuario.idUsuario);
+                                        _valorDropdown, infoUsuario.idUsuario, "texto");
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    return showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          // Retrieve the text the that user has entered by using the
+                                          // TextEditingController.
+                                          content:
+                                              Text("Publicado com sucesso!"),
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                //Texto do butao
+                                child: Text(
+                                  "Publicar",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            0.023,
+                                    color: Color.fromRGBO(112, 112, 112, 1),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                      // Segunda parte, de imagem
+                      Container(
+                          //Cria o formulario
+                          child: Form(
+                        key: _chaveForm,
+                        //Alinhar em coluna
+                        child: Column(
+                          //Bota no canto superior esquerdo acho sei la
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //Padding é tipo margin
+                            Padding(
+                              //Margem no topo, na esqueda e em baixo
+                              padding: EdgeInsets.only(
+                                  //MediaQuery serve pra vc pegar o tamanho da tela ai vc multiplica pela porcentagem da tela que vc quer, isso ajuda para telas com tamanhos diferentes
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.025,
+                                  bottom:
+                                      MediaQuery.of(context).size.height * 0.01,
+                                  top: MediaQuery.of(context).size.height *
+                                      0.01),
+                              child: Container(
+                                //Agora começa mesmo o form, com o dropdownbutton
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                child: DropdownButtonFormField<dynamic>(
+                                  // Validador do dropdown, se estiver vazio retorna a falha e nao envia
+                                  validator: (dynamic value) {
+                                    if (value?.isEmpty ?? true) {
+                                      return 'Selecione um tópico válido';
+                                    }
+                                    return null;
+                                  },
+                                  //Decoração
+                                  decoration: InputDecoration(
+                                    //Muda a linha de baixo para cinza
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey[300],
+                                    )),
+                                    //Mema coisa só que quando selecionado
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey,
+                                    )),
+                                  ),
+                                  //O texto que aparece dentro
+                                  hint: Text(
+                                    "Selecione o tópico",
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.023,
+                                    ),
+                                  ),
+                                  items:
+                                      //Os itens da dropdown, será sempre passado o value que seria o ID do topico
+                                      lista.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items,
+                                      child: Text(items,
+                                          style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.023)),
+                                    );
+                                  }).toList(),
+                                  // : null,
+                                  //Quando for selecionado algo mudar o valor da variavel para o que foi selecionado
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _valorDropdown = value;
+                                    });
+                                  },
+                                  //Sempre que voce selecionar algo, o valor de dentro muda para o da selecao
+                                  value: _valorDropdown,
+                                ),
+                              ),
+                            ),
+                            //Textbox do titulo
+                            Container(
+                              //Margem pra esquerda pra nao ficar grudado
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.03),
+                              //Tamanho
+                              width: MediaQuery.of(context).size.width * 0.96,
+                              //A caixa de texto em si
+                              child: TextFormField(
+                                //Cor da barra de escrever
+                                cursorColor: Color.fromRGBO(112, 112, 112, 1),
+                                //Decoraçao
+                                decoration: InputDecoration(
+                                    //Texto de dentro
+                                    hintText: "Digite o titulo",
+                                    //Tamanho da letra
+                                    hintStyle: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.023,
+                                    ),
+                                    //Muda cor da linha
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey[300],
+                                    )),
+                                    //denovo
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey,
+                                    ))),
+                                //Tamanho maximo do titulo
+                                maxLength: 120,
+                                //Tem tamanho maximo
+                                maxLengthEnforced: true,
+                                //Se tiver vazio nao deixa enviar, senao armazena na variavel
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Digite um titulo válido';
+                                  }
+                                  _valorTitulo = value;
+                                  return null;
+                                },
+                              ),
+                            ),
+                            //Caixa de texto do corpo da publicação
+                            Container(
+                              //bla bla
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.03),
+                              width: MediaQuery.of(context).size.width * 0.96,
+                              child: TextFormField(
+                                //Controller utilizado para pegar a informação de dentro da caixa de texto
+                                controller: _valorTexto,
+                                //bla bla
+                                cursorColor: Color.fromRGBO(112, 112, 112, 1),
+                                decoration: InputDecoration(
+                                    hintText:
+                                        "Digite o link da imagem",
+                                    hintStyle: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.023,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey[300],
+                                    )),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.grey,
+                                    ))),
+                                //Tamanho maximo
+                                maxLength: 1000,
+                                maxLengthEnforced: true,
+                                //Numero de linhas que vai aparecer, tenho que diminuir acho sei la
+                                maxLines: 7,
+                              ),
+                            ),
+                            //Botao enviar
+                            Container(
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.65),
+                              child: RaisedButton(
+                                //tira sombra
+                                elevation: 0,
+                                //cor tem que mudar
+                                color: Colors.grey.shade300,
+                                //funcao quando clicado
+                                onPressed: () {
+                                  //se for invalidado o estado da chave do formulario, isso quer dizer se os validator retornarem corretamente
+                                  if (_chaveForm.currentState.validate() &&
+                                      _valorTitulo.isNotEmpty &&
+                                      _valorDropdown.isNotEmpty) {
+                                    postTexto(_valorTitulo, _valorTexto.text,
+                                        _valorDropdown, infoUsuario.idUsuario, "imagem");
                                     Navigator.of(context, rootNavigator: true)
                                         .pop();
                                     return showDialog(
@@ -293,7 +501,6 @@ class _Formulario extends State<Formulario> {
                         ),
                       )),
                       //Formularios otro
-                      JanelaVideo(),
                       JanelaVideo(),
                     ],
                   );
