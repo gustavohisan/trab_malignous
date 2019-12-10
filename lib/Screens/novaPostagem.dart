@@ -141,7 +141,6 @@ class _Formulario extends State<Formulario> {
                                   items:
                                       //Os itens da dropdown, será sempre passado o value que seria o ID do topico
                                       lista.map((items) {
-                                    // print(lista.join());
                                     return DropdownMenuItem(
                                       value: items,
                                       child: Text(items,
@@ -155,7 +154,6 @@ class _Formulario extends State<Formulario> {
                                   // : null,
                                   //Quando for selecionado algo mudar o valor da variavel para o que foi selecionado
                                   onChanged: (value) {
-                                    print(value);
                                     setState(() {
                                       _valorDropdown = value;
                                     });
