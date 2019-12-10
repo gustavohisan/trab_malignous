@@ -5,7 +5,9 @@ import 'package:trab_malignous/API/Api.dart';
 
 class MeuPerfil extends StatefulWidget {
   @override
-  createState() => _MeuPerfil();
+  _MeuPerfil createState() {
+    return _MeuPerfil();
+  }
 }
 
 class _MeuPerfil extends State<MeuPerfil> {
@@ -21,30 +23,31 @@ class _MeuPerfil extends State<MeuPerfil> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-                    future: getMinhasPublicacoes(),
-                    builder: (context, projectSnap) {
-                      return projectSnap.hasData
-                          ? ListView.builder(
-                              itemCount: projectSnap.data.length,
-                              //Scroll vertical
-                              scrollDirection: Axis.vertical,
-                              //Começa a criação
-                              itemBuilder: (BuildContext ctxt, int index) {
-                                if (projectSnap.data[index].tipo
-                                        .compareTo('texto') ==
-                                    0) {
-                                  return Container(
-                                    child: PostagemMeuPerfilTexto(
-                                        postagem: projectSnap.data[index]),
-                                  );
-                                } else {
-                                  return Container(
-                                    child: PostagemMeuPerfilImagem(
-                                        postagem: projectSnap.data[index]),
-                                  );
-                                }
-                              })
-                          : Center(child: CircularProgressIndicator());
-                    });
+      future: getMinhasPublicacoes(),
+      builder: (context, projectSnap) {
+        return projectSnap.hasData
+            ? ListView.builder(
+                itemCount: projectSnap.data.length,
+                //Scroll vertical
+                scrollDirection: Axis.vertical,
+                //Começa a criação
+                itemBuilder: (BuildContext ctxt, int index) {
+                  if (projectSnap.data[index].tipo.compareTo('texto') == 0) {
+                    return Container(
+                      child: PostagemMeuPerfilTexto(
+                          postagem: projectSnap.data[index]
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      child: PostagemMeuPerfilImagem(
+                          postagem: projectSnap.data[index]
+                      ),
+                    );
+                  }
+                }
+              )
+            : Center(child: CircularProgressIndicator());
+      });
   }
 }

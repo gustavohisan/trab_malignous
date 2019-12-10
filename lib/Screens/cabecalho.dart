@@ -6,6 +6,13 @@ import 'package:trab_malignous/Screens/meuPerfil.dart';
 //Stateless ja que nao tem mudança, prefferedsizewidget porque é obrigatório
 class Cabecalho extends StatelessWidget with PreferredSizeWidget {
   //Tudo ai em baixo é o cabeçalho
+
+  static bool _paginaInicial = true;
+
+  static bool isPaginaInicial () {
+    return _paginaInicial;
+  }
+
   @override
   Widget build(BuildContext context) {
     //Variaveis para guardar coisas inuteis na real que eu nem uso direito porém é mais recomendado usar
@@ -33,7 +40,8 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                   iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
                   color: Color.fromRGBO(112, 112, 112, 1),
                   onPressed: () {
-                    return MyApp();
+                    _paginaInicial = true;
+                    runApp(MyApp());
                   }
                 ),
               ),
@@ -44,7 +52,11 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                     iconSize: (widthIcone < heightIcone) ? widthIcone : heightIcone,
                     color: Color.fromRGBO(112, 112, 112, 1),
                     onPressed: () {
-                      return Formulario();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Formulario()
+                      ),
+                  );
                     }
                 ),
               ),
@@ -94,7 +106,8 @@ class Cabecalho extends StatelessWidget with PreferredSizeWidget {
                   color: Color.fromRGBO(112, 112, 112, 1),
                   //Aqui ficaria o perfil se tivesse n tem
                   onPressed: () {
-                    return MeuPerfil();
+                    _paginaInicial = false;
+                    runApp(MyApp());
                   },
                 ),
               ),
